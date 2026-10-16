@@ -189,7 +189,7 @@ function Index() {
               <p className="mt-6 text-lg leading-relaxed text-muted-foreground">{c.hero.subtitle}</p>
               <ul className="mt-8 flex flex-wrap gap-3">
                 {c.hero.badges.map((b, i) => {
-                  const I = badgeIcons[i];
+                  const I = badgeIcons[i] ?? Sparkles;
                   return (
                     <li key={b} className="inline-flex items-center gap-2 rounded-full bg-secondary px-4 py-2 text-sm font-semibold text-night">
                       <I className="size-4 text-primary" /> {b}
@@ -302,7 +302,7 @@ function Index() {
           <H2>{c.forWho.title}</H2>
           <ul className="grid gap-5 md:grid-cols-2">
             {c.forWho.items.map((t, i) => {
-              const I = forIcons[i];
+              const I = forIcons[i] ?? Sparkles;
               return (
                 <li key={t} className="flex gap-4 rounded-2xl border border-border p-6">
                   <span className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-secondary"><I className="size-5 text-primary" /></span>
@@ -339,7 +339,7 @@ function Index() {
           <H2>{c.access.title}</H2>
           <ol className="grid gap-5 md:grid-cols-3">
             {c.access.items.map(([t, d], i) => {
-              const I = accessIcons[i];
+              const I = accessIcons[i] ?? Sparkles;
               return (
                 <li key={t} className="rounded-2xl bg-card p-6 text-center shadow-soft">
                   <span className="mx-auto flex size-14 items-center justify-center rounded-full bg-primary"><I className="size-6 text-primary-foreground" /></span>
