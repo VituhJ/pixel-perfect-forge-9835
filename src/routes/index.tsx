@@ -221,16 +221,16 @@ function Index() {
         {/* 3 Resumo */}
         <Section>
           <H2>{c.summary.title}</H2>
-          <div className="grid items-center gap-12 md:grid-cols-2">
-            <ul className="space-y-4">
+          <div className="grid min-w-0 items-center gap-12 md:grid-cols-2">
+            <ul className="min-w-0 space-y-4">
               {c.summary.items.map((it) => (
                 <li key={it} className="flex gap-3 text-[17px]">
                   <Check className="mt-1 size-5 shrink-0 text-primary" strokeWidth={3} /> <span>{it}</span>
                 </li>
               ))}
             </ul>
-            <div className="flex justify-center">
-              <div className="flex">
+            <div className="flex min-w-0 justify-center overflow-hidden">
+              <div className="flex origin-center scale-[0.78] sm:scale-90 md:scale-100">
                 {c.covers.map((_, i) => (
                   <div key={i} className="-ml-10 first:ml-0" style={{ transform: `rotate(${(i - 2) * 6}deg) translateY(${Math.abs(i - 2) * 8}px)` }}>
                     <Cover i={i} />
