@@ -7,6 +7,8 @@ import {
 import { Button } from "@/components/ui/button";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import * as c from "@/content";
+import kitCover from "@/assets/kit-influenciador-ia.png";
+import bonusCover from "@/assets/mockup-bonus-influenciador-ia.png";
 
 export const Route = createFileRoute("/")({
   component: Index,
@@ -39,14 +41,14 @@ function Reveal({ children, className = "" }: { children: ReactNode; className?:
 
 function Section({ children, alt, id, narrow }: { children: ReactNode; alt?: boolean; id?: string; narrow?: boolean }) {
   return (
-    <section id={id} className={`px-4 py-8 md:px-5 md:py-24 ${alt ? "bg-secondary" : "bg-background"}`}>
+    <section id={id} className={`px-4 py-12 md:px-5 md:py-24 ${alt ? "bg-secondary" : "bg-background"}`}>
       <Reveal className={`mx-auto ${narrow ? "max-w-[720px]" : "max-w-[1040px]"}`}>{children}</Reveal>
     </section>
   );
 }
 
 function H2({ children }: { children: ReactNode }) {
-  return <h2 className="mx-auto mb-5 max-w-[720px] md:mb-10 text-center text-2xl font-extrabold leading-tight md:text-4xl">{children}</h2>;
+  return <h2 className="mx-auto mb-7 max-w-[720px] text-center text-2xl font-extrabold leading-tight md:mb-10 md:text-4xl">{children}</h2>;
 }
 
 function BuyButton({ label }: { label: string }) {
@@ -61,8 +63,8 @@ function BuyButton({ label }: { label: string }) {
     return () => io.disconnect();
   }, []);
   return (
-    <div className="mt-5 flex justify-center md:mt-10">
-      <Button asChild variant="cta" size="xl" className="min-h-12 px-5 py-3 md:min-h-14 md:px-8 md:py-4">
+    <div className="mt-7 flex justify-center md:mt-10">
+      <Button asChild variant="cta" size="xl" className="h-auto min-h-14 px-5 py-3 leading-snug md:px-8 md:py-4">
         <a ref={ref} href={c.CHECKOUT_URL} target="_blank" rel="noopener noreferrer">{label}</a>
       </Button>
     </div>
@@ -80,6 +82,17 @@ function Cover({ i, size = "md" }: { i: number; size?: "sm" | "md" }) {
   );
 }
 
+function DeliverableMockup({ isBonus }: { isBonus: boolean }) {
+  return (
+    <div className="deliverable-mockup shrink-0" aria-hidden="true">
+      <div className="deliverable-book">
+        <img src={isBonus ? bonusCover : kitCover} alt="" className="size-full rounded-[inherit] object-cover" />
+        <span className="deliverable-book-spine" />
+      </div>
+    </div>
+  );
+}
+
 function Logo() {
   return (
     <div className="inline-flex items-center rounded-xl border-2 border-dashed border-border px-4 py-2 text-sm font-semibold text-muted-foreground">
@@ -90,7 +103,7 @@ function Logo() {
 
 function Phone() {
   return (
-    <div className="mx-auto w-[200px] rounded-[2.75rem] bg-night p-3 shadow-hero ring-1 ring-night/25 md:w-[320px]" aria-hidden="true">
+    <div className="mx-auto w-[240px] rounded-[2.75rem] bg-night p-3 shadow-hero ring-1 ring-night/25 md:w-[320px]" aria-hidden="true">
       <div className="bg-screen relative aspect-[9/16] overflow-hidden rounded-[2.25rem] ring-1 ring-night/20">
         <div className="absolute left-1/2 top-2 h-5 w-20 -translate-x-1/2 rounded-full bg-night" />
         {/* personagem abstrato */}
@@ -117,7 +130,7 @@ function TestimonialCards({ items }: { items: c.Testimonial[] }) {
   return (
     <div className="grid gap-3 md:grid-cols-2 md:gap-5">
       {items.map((t, i) => (
-        <figure key={i} className="flex flex-col rounded-2xl border border-border bg-card p-4 shadow-soft md:p-6">
+        <figure key={i} className={`flex flex-col rounded-2xl border border-border bg-card p-4 shadow-soft md:p-6 ${items.length === 1 ? "mx-auto w-full max-w-[560px] md:col-span-2" : ""}`}>
           <div className="flex gap-1" aria-label="5 estrelas">
             {Array.from({ length: 5 }).map((_, s) => (
               <Star key={s} className="size-4 fill-coral text-coral" aria-hidden="true" />
@@ -131,6 +144,7 @@ function TestimonialCards({ items }: { items: c.Testimonial[] }) {
               src={t.image}
               alt={`Conversa no WhatsApp com ${t.name}`}
               loading="lazy"
+              onError={(event) => event.currentTarget.remove()}
               className="mt-4 w-full max-w-[240px] self-center rounded-xl border border-border shadow-soft"
             />
           )}
@@ -143,11 +157,11 @@ function TestimonialCards({ items }: { items: c.Testimonial[] }) {
 function PriceBlock({ id }: { id: string }) {
   return (
     <Section id={id} narrow>
-      <div className="space-y-3 text-center text-base md:space-y-5 md:text-lg text-muted-foreground">
+      <div className="space-y-4 text-center text-base leading-relaxed md:space-y-5 md:text-lg text-muted-foreground">
         {c.price.paragraphs.map((p) => <p key={p}>{p}</p>)}
       </div>
-      <div className="mt-5 flex justify-center md:mt-10"><Logo /></div>
-      <div className="mx-auto mt-5 max-w-md md:mt-8 rounded-3xl border-2 border-primary bg-card p-5 text-center md:p-8 shadow-soft">
+      <div className="mt-7 flex justify-center md:mt-10"><Logo /></div>
+      <div className="mx-auto mt-6 max-w-md rounded-3xl border-2 border-primary bg-card p-6 text-center shadow-soft md:mt-8 md:p-8">
         <p className="text-lg font-semibold text-muted-foreground line-through">{c.price.from}</p>
         <p className="mt-3 text-sm font-bold tracking-widest text-primary">{c.price.forLabel}</p>
         <p className="font-display text-6xl font-extrabold text-night md:text-7xl">{c.price.value}</p>
@@ -174,17 +188,12 @@ function Index() {
 
       <main>
         {/* 1 Hero */}
-        <section className="px-4 pb-8 pt-3 md:px-5 md:pb-24 md:pt-12">
-          <Reveal className="mx-auto grid max-w-[1040px] items-center gap-6 md:grid-cols-[1.45fr_1fr] md:gap-12">
+        <section className="px-4 pb-12 pt-6 md:px-5 md:pb-24 md:pt-12">
+          <Reveal className="mx-auto grid max-w-[1040px] items-center gap-8 md:grid-cols-[1.45fr_1fr] md:gap-12">
             <div className="min-w-0">
               <h1 className="text-[38px] font-extrabold leading-[1.06] tracking-normal sm:text-[46px] md:text-[58px] lg:text-[64px]">{c.hero.h1}</h1>
               <p className="mt-4 text-base leading-relaxed md:mt-6 md:text-lg text-muted-foreground">{c.hero.subtitle}</p>
-              <div className="mt-4 md:hidden">
-                <Button asChild variant="cta" size="xl" className="min-h-12 px-5 py-3">
-                  <a href={c.CHECKOUT_URL} target="_blank" rel="noopener noreferrer">{c.price.cta}</a>
-                </Button>
-              </div>
-              <ul className="mt-4 flex flex-wrap gap-2 md:mt-8 md:gap-3">
+              <ul className="mt-5 flex flex-wrap gap-3 md:mt-8 md:gap-3">
                 {c.hero.badges.map((b, i) => {
                   const I = badgeIcons[i] ?? Sparkles;
                   return (
@@ -194,6 +203,11 @@ function Index() {
                   );
                 })}
               </ul>
+              <div className="mt-6 md:hidden">
+                <Button asChild variant="cta" size="xl" className="h-auto min-h-14 w-full whitespace-normal px-5 py-3 text-center leading-snug">
+                  <a href={c.CHECKOUT_URL} target="_blank" rel="noopener noreferrer">{c.stickyBar.cta}</a>
+                </Button>
+              </div>
             </div>
             <Phone />
           </Reveal>
@@ -202,9 +216,9 @@ function Index() {
         {/* 2 Passos */}
         <Section alt>
           <H2>{c.steps.title}</H2>
-          <ol className="relative grid gap-3 md:grid-cols-5 md:gap-5">
+          <ol className="relative grid gap-4 md:grid-cols-5 md:gap-5">
             {c.steps.items.map(([t, d], i) => (
-              <li key={t} className="flex gap-3 rounded-2xl border border-border bg-card p-4 shadow-soft md:flex-col md:gap-4 md:p-5">
+              <li key={t} className="flex gap-4 rounded-2xl border border-border bg-card p-5 shadow-soft md:flex-col md:gap-4 md:p-5">
                 <span className="flex size-11 shrink-0 items-center justify-center rounded-full bg-primary font-display text-lg font-bold text-primary-foreground">{i + 1}</span>
                 <div>
                   <h3 className="font-bold">{t}</h3>
@@ -218,16 +232,16 @@ function Index() {
         {/* 3 Resumo */}
         <Section>
           <H2>{c.summary.title}</H2>
-          <div className="grid min-w-0 items-center gap-6 md:grid-cols-2 md:gap-12">
-            <ul className="min-w-0 space-y-3 md:space-y-4">
+          <div className="grid min-w-0 items-center gap-8 md:grid-cols-2 md:gap-12">
+            <ul className="min-w-0 space-y-4">
               {c.summary.items.map((it) => (
                 <li key={it} className="flex gap-3 text-base md:text-[17px]">
                   <Check className="mt-1 size-5 shrink-0 text-primary" strokeWidth={3} /> <span>{it}</span>
                 </li>
               ))}
             </ul>
-            <div className="flex min-w-0 justify-center overflow-hidden">
-              <div className="flex origin-center scale-[0.78] sm:scale-90 md:scale-100">
+            <div className="flex min-w-0 justify-center overflow-visible px-2 py-6">
+              <div className="flex origin-center scale-[0.72] sm:scale-[0.82] md:scale-100">
                 {c.covers.map((_, i) => (
                   <div key={i} className="-ml-10 first:ml-0" style={{ transform: `rotate(${(i - 2) * 6}deg) translateY(${Math.abs(i - 2) * 8}px)` }}>
                     <Cover i={i} />
@@ -240,9 +254,9 @@ function Index() {
 
         {/* 4 Perfeito para */}
         <Section alt>
-          <div className="grid gap-3 md:grid-cols-2 md:gap-5">
+          <div className="grid gap-4 md:grid-cols-2 md:gap-5">
             {c.perfectFor.map((p) => (
-              <div key={p} className="rounded-3xl bg-card p-5 shadow-soft md:p-8">
+              <div key={p} className="rounded-3xl bg-card p-6 shadow-soft md:p-8">
                 <Star className="mb-3 size-7 md:mb-4 text-primary" />
                 <p className="font-display text-lg font-bold leading-snug md:text-xl text-night">{p}</p>
               </div>
@@ -261,10 +275,10 @@ function Index() {
         {/* 6 Agitação */}
         <Section narrow>
           <h2 className="text-center text-2xl font-extrabold leading-tight md:text-4xl">{c.agitation.title}</h2>
-          <div className="mt-5 space-y-4 text-base leading-relaxed md:mt-10 md:space-y-6 md:text-lg">
+          <div className="mt-7 space-y-5 text-base leading-relaxed md:mt-10 md:space-y-6 md:text-lg">
             {c.agitation.paragraphs.map((p) => <p key={p}>{p}</p>)}
           </div>
-          <p className="mt-5 rounded-2xl bg-primary p-4 text-center font-display text-lg md:mt-10 md:p-6 md:text-xl font-bold text-primary-foreground">{c.agitation.highlight}</p>
+          <p className="mt-7 rounded-2xl bg-primary p-5 text-center font-display text-lg md:mt-10 md:p-6 md:text-xl font-bold text-primary-foreground">{c.agitation.highlight}</p>
         </Section>
 
         {/* 7 Depoimento dor */}
@@ -273,17 +287,17 @@ function Index() {
         {/* 8 Entregáveis */}
         <Section alt id="entregaveis">
           <H2>{c.deliverables.title}</H2>
-          <div className="grid gap-3 md:grid-cols-2 md:gap-5">
+          <div className="grid gap-4 md:grid-cols-2 md:gap-5">
             {c.deliverables.items.map((d) => (
-              <article key={d.label} className={`relative grid grid-cols-[minmax(0,1fr)_auto] gap-x-3 gap-y-2 rounded-2xl border bg-card p-4 shadow-soft md:flex md:gap-5 md:p-5 ${d.favorite ? "border-2 border-coral" : "border-border"}`}>
+              <article key={d.label} className={`relative grid grid-cols-[104px_minmax(0,1fr)] items-center gap-4 rounded-2xl border bg-card p-4 shadow-soft sm:grid-cols-[128px_minmax(0,1fr)] sm:gap-5 sm:p-5 md:flex ${d.favorite ? "border-2 border-coral" : "border-border"}`}>
                 {d.favorite && (
                   <span className="absolute -top-3 right-5 rounded-full bg-cta px-3 py-1 text-xs font-bold text-cta-foreground">{c.deliverables.favoriteTag}</span>
                 )}
-                <div className="col-start-2 row-start-1 shrink-0 md:order-none"><Cover i={d.cover} size="sm" /></div>
-                <div className="col-start-1 row-start-1 min-w-0 md:[display:block] max-md:contents">
-                  <p className="col-start-1 row-start-1 self-start text-xs font-bold uppercase tracking-widest text-primary">{d.label}</p>
-                  <h3 className="col-start-1 row-start-1 mt-5 self-start font-bold leading-snug md:mt-1">{d.title}</h3>
-                  <p className="col-span-2 mt-0 text-muted-foreground md:mt-2">{d.text}</p>
+                <DeliverableMockup isBonus={d.label.startsWith("Bônus")} />
+                <div className="min-w-0 md:flex-1">
+                    <p className="text-xs font-bold uppercase tracking-widest text-primary">{d.label}</p>
+                    <h3 className="mt-2 font-bold leading-snug">{d.title}</h3>
+                    <p className="mt-3 text-sm leading-relaxed text-muted-foreground md:text-base">{d.text}</p>
                 </div>
               </article>
             ))}
@@ -297,11 +311,11 @@ function Index() {
         {/* 10 Para quem é */}
         <Section>
           <H2>{c.forWho.title}</H2>
-          <ul className="grid gap-3 md:grid-cols-2 md:gap-5">
+          <ul className="grid gap-4 md:grid-cols-2 md:gap-5">
             {c.forWho.items.map((t, i) => {
               const I = forIcons[i] ?? Sparkles;
               return (
-                <li key={t} className="flex gap-3 rounded-2xl border border-border p-4 md:gap-4 md:p-6">
+                <li key={t} className="flex gap-4 rounded-2xl border border-border p-5 md:p-6">
                   <span className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-secondary"><I className="size-5 text-primary" /></span>
                   <p className="min-w-0 text-base md:text-[17px]">{t}</p>
                 </li>
@@ -315,13 +329,13 @@ function Index() {
           <H2>{c.recap.title}</H2>
           <ul className="divide-y divide-border rounded-2xl bg-card shadow-soft">
             {c.recap.items.map((r) => (
-              <li key={r.name} className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 p-3 md:flex md:gap-4 md:p-4">
+              <li key={r.name} className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 p-4 md:flex md:gap-4 md:p-4">
                 <Cover i={r.cover} size="sm" />
                 <span className="min-w-0 flex-1 font-medium">{r.name}</span>
                 <span className="shrink-0 whitespace-nowrap font-display font-bold text-night">{r.value}</span>
               </li>
             ))}
-            <li className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 rounded-b-2xl bg-night p-4 text-night-foreground md:flex md:justify-between md:gap-4 md:p-5">
+            <li className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 rounded-b-2xl bg-night p-5 text-night-foreground md:flex md:justify-between md:gap-4 md:p-5">
               <span className="min-w-0 font-semibold">{c.recap.totalLabel}</span>
               <span className="shrink-0 whitespace-nowrap font-display text-2xl font-extrabold">{c.recap.total}</span>
             </li>
@@ -334,11 +348,11 @@ function Index() {
         {/* 13 Acesso */}
         <Section alt>
           <H2>{c.access.title}</H2>
-          <ol className="grid gap-3 md:grid-cols-3 md:gap-5">
+          <ol className="grid gap-4 md:grid-cols-3 md:gap-5">
             {c.access.items.map(([t, d], i) => {
               const I = accessIcons[i] ?? Sparkles;
               return (
-                <li key={t} className="rounded-2xl bg-card p-4 text-center shadow-soft md:p-6">
+                <li key={t} className="rounded-2xl bg-card p-5 text-center shadow-soft md:p-6">
                   <span className="mx-auto flex size-14 items-center justify-center rounded-full bg-primary"><I className="size-6 text-primary-foreground" /></span>
                   <h3 className="mt-4 font-extrabold tracking-wide">{t}</h3>
                   <p className="mt-2 text-muted-foreground">{d}</p>
@@ -358,7 +372,7 @@ function Index() {
             </svg>
             <h2 className="mt-4 text-2xl font-extrabold md:mt-6 md:text-4xl">{c.guarantee.title}</h2>
           </div>
-          <div className="mt-5 space-y-3 text-center text-base md:mt-8 md:space-y-5 md:text-lg leading-relaxed">
+          <div className="mt-7 space-y-4 text-center text-base leading-relaxed md:mt-8 md:space-y-5 md:text-lg">
             {c.guarantee.paragraphs.map((p) => <p key={p}>{p}</p>)}
           </div>
           <BuyButton label={c.guarantee.cta} />
@@ -367,7 +381,7 @@ function Index() {
         {/* 15 Mentor */}
         <Section alt narrow>
           <H2>{c.mentor.title}</H2>
-          <div className="flex flex-col items-center gap-3 text-center md:gap-6">
+          <div className="flex flex-col items-center gap-5 text-center md:gap-6">
             <div className="flex size-24 items-center md:size-32 justify-center rounded-full bg-border"><User className="size-12 text-muted-foreground" /></div>
             <h3 className="text-xl font-bold">{c.mentor.name}</h3>
             <p className="text-base text-muted-foreground md:text-lg">{c.mentor.text}</p>
@@ -377,15 +391,15 @@ function Index() {
         {/* 16 Duas opções */}
         <Section>
           <H2>{c.choice.title}</H2>
-          <div className="grid gap-3 md:grid-cols-2 md:gap-5">
+          <div className="grid gap-4 md:grid-cols-2 md:gap-5">
             {c.choice.options.map(([t, d], i) => (
-              <div key={t} className={`rounded-3xl p-5 md:p-8 ${i === 1 ? "border-2 border-primary bg-secondary shadow-soft" : "border border-border"}`}>
+              <div key={t} className={`rounded-3xl p-6 md:p-8 ${i === 1 ? "border-2 border-primary bg-secondary shadow-soft" : "border border-border"}`}>
                 <h3 className={`text-lg font-extrabold ${i === 1 ? "text-primary" : ""}`}>{t}</h3>
                 <p className="mt-3 text-[17px]">{d}</p>
               </div>
             ))}
           </div>
-          <div className="mx-auto mt-5 max-w-[720px] space-y-3 text-center text-base md:mt-10 md:text-lg">
+          <div className="mx-auto mt-7 max-w-[720px] space-y-4 text-center text-base md:mt-10 md:text-lg">
             {c.choice.paragraphs.map((p) => <p key={p}>{p}</p>)}
           </div>
           <BuyButton label={c.choice.cta} />

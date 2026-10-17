@@ -1,5 +1,5 @@
 // Todos os textos da página ficam aqui. Edite livremente.
-export const CHECKOUT_URL = "[COLE AQUI O LINK DO CHECKOUT]";
+export const CHECKOUT_URL = "https://pay.kiwify.com.br/i50AdhF";
 
 export type Testimonial = { name: string; action: string; result: string; context?: "dor" | "bonus"; image?: string };
 // Use context: "dor" ou "bonus" para os blocos 7 e 9. image: print do depoimento (opcional).
@@ -149,9 +149,9 @@ export const price = {
   ],
   from: "DE R$ 297",
   forLabel: "POR APENAS",
-  value: "R$ 37",
+  value: "R$ 15",
   suffix: "À VISTA",
-  cta: "Sim, quero garantir por R$ 37",
+  cta: "Sim, quero garantir por R$ 15",
 };
 
 export const access = {
@@ -217,4 +217,4 @@ export const footer = {
   copyright: "© [ANO] [SEU NOME OU EMPRESA]. Todos os direitos reservados.",
 };
 
-export const stickyBar = { price: "R$ 37 à vista", cta: "Quero meu kit" };
+export const stickyBar = { price: "R$ 15 à vista", cta: "Quero meu kit" };
