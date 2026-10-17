@@ -51,6 +51,7 @@
   --font-display: "Plus Jakarta Sans", sans-serif;
   --font-sans: "Inter", sans-serif;
   --shadow-soft: var(--shadow-soft);
+  --shadow-hero: var(--shadow-hero);
   --color-input: var(--input);
   --color-ring: var(--ring);
   --color-ring-offset-background: var(--background);
@@ -81,7 +82,7 @@
   --popover-foreground: oklch(0.27 0.03 275);
   --primary: oklch(0.5 0.24 283);
   --primary-foreground: oklch(1 0 0);
-  --cta: oklch(0.58 0.2 24);
+  --cta: oklch(0.52 0.2 24);
   --cta-foreground: oklch(1 0 0);
   --coral: oklch(0.68 0.19 24);
   --secondary: oklch(0.965 0.02 295);
@@ -96,7 +97,8 @@
   --input: oklch(0.89 0.03 295);
   --ring: oklch(0.5 0.24 283);
   --shadow-soft: 0 8px 30px -12px oklch(0.22 0.07 277 / 0.18);
-  --gradient-screen: linear-gradient(160deg, oklch(0.62 0.22 290), oklch(0.42 0.24 280) 60%, oklch(0.25 0.1 277));
+  --shadow-hero: 0 40px 80px -30px oklch(0.16 0.08 280 / 0.55), 0 12px 28px -12px oklch(0.16 0.08 280 / 0.35);
+  --gradient-screen: linear-gradient(160deg, oklch(0.55 0.24 290), oklch(0.35 0.26 280) 60%, oklch(0.18 0.1 277));
 }
 
 @layer base {

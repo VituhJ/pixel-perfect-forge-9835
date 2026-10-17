@@ -90,8 +90,8 @@ function Logo() {
 
 function Phone() {
   return (
-    <div className="mx-auto w-[240px] rounded-[2.5rem] bg-night p-3 shadow-soft md:w-[280px]" aria-hidden="true">
-      <div className="bg-screen relative aspect-[9/16] overflow-hidden rounded-[2rem]">
+    <div className="mx-auto w-[268px] rounded-[2.75rem] bg-night p-3 shadow-hero ring-1 ring-night/25 md:w-[320px]" aria-hidden="true">
+      <div className="bg-screen relative aspect-[9/16] overflow-hidden rounded-[2.25rem] ring-1 ring-black/20">
         <div className="absolute left-1/2 top-2 h-5 w-20 -translate-x-1/2 rounded-full bg-night" />
         {/* personagem abstrato */}
         <svg viewBox="0 0 200 300" className="absolute inset-x-0 bottom-0 w-full">
@@ -183,9 +183,9 @@ function Index() {
       <main>
         {/* 1 Hero */}
         <section className="px-5 pb-16 pt-6 md:pb-24 md:pt-12">
-          <Reveal className="mx-auto grid max-w-[1040px] items-center gap-12 md:grid-cols-[1.25fr_1fr]">
+          <Reveal className="mx-auto grid max-w-[1040px] items-center gap-12 md:grid-cols-[1.45fr_1fr]">
             <div>
-              <h1 className="text-[32px] font-extrabold leading-[1.12] sm:text-[40px] md:text-[52px] lg:text-[56px]">{c.hero.h1}</h1>
+              <h1 className="text-[38px] font-extrabold leading-[1.06] tracking-tight sm:text-[46px] md:text-[58px] lg:text-[64px]">{c.hero.h1}</h1>
               <p className="mt-6 text-lg leading-relaxed text-muted-foreground">{c.hero.subtitle}</p>
               <ul className="mt-8 flex flex-wrap gap-3">
                 {c.hero.badges.map((b, i) => {
@@ -221,16 +221,16 @@ function Index() {
         {/* 3 Resumo */}
         <Section>
           <H2>{c.summary.title}</H2>
-          <div className="grid items-center gap-12 md:grid-cols-2">
-            <ul className="space-y-4">
+          <div className="grid min-w-0 items-center gap-12 md:grid-cols-2">
+            <ul className="min-w-0 space-y-4">
               {c.summary.items.map((it) => (
                 <li key={it} className="flex gap-3 text-[17px]">
                   <Check className="mt-1 size-5 shrink-0 text-primary" strokeWidth={3} /> <span>{it}</span>
                 </li>
               ))}
             </ul>
-            <div className="flex justify-center">
-              <div className="flex">
+            <div className="flex min-w-0 justify-center overflow-hidden">
+              <div className="flex origin-center scale-[0.78] sm:scale-90 md:scale-100">
                 {c.covers.map((_, i) => (
                   <div key={i} className="-ml-10 first:ml-0" style={{ transform: `rotate(${(i - 2) * 6}deg) translateY(${Math.abs(i - 2) * 8}px)` }}>
                     <Cover i={i} />
