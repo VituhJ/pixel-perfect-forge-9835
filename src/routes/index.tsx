@@ -177,7 +177,12 @@ function Index() {
             <div className="min-w-0">
               <h1 className="text-center text-[38px] font-extrabold leading-[1.06] tracking-normal sm:text-[46px] md:text-[58px] lg:text-[64px]">{c.hero.h1}</h1>
               <p className="mt-4 text-center text-base leading-relaxed text-muted-foreground md:mt-6 md:text-lg">{c.hero.subtitle}</p>
-              <ul className="mt-5 flex flex-wrap gap-3 md:mt-8 md:gap-3">
+              <div className="mt-6 hidden justify-center md:flex">
+                <Button asChild variant="cta" size="xl" className="h-auto min-h-14 px-8 py-4 leading-snug">
+                  <a href={c.CHECKOUT_URL} target="_blank" rel="noopener noreferrer">{c.hero.cta}</a>
+                </Button>
+              </div>
+              <ul className="mt-5 flex flex-wrap gap-3 md:mt-5 md:justify-center md:gap-3">
                 {c.hero.badges.map((b, i) => {
                   const I = badgeIcons[i] ?? Sparkles;
                   return (

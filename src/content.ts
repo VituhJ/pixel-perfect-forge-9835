@@ -57,6 +57,7 @@ export const hero = {
   h1: "Seu primeiro vídeo com influenciador de IA em 1 dia, só copiando e colando: Influenciador de IA Pronto em 1 Dia.",
   subtitle:
     "Chega de gerar imagem que sai com um rosto diferente a cada vez. Você ganha o passo a passo, os prompts e os roteiros prontos para quem nunca usou IA.",
+  cta: "Quero começar agora!",
   badges: ["Kit em PDF", "Acesso imediato", "7 dias de garantia"],
   phoneTag: "Personagem criado com IA",
   phoneCaption: "Oi! Eu sou sua nova criadora de conteúdo…",
