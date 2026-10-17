@@ -117,10 +117,23 @@ function TestimonialCards({ items }: { items: c.Testimonial[] }) {
   return (
     <div className="grid gap-5 md:grid-cols-2">
       {items.map((t, i) => (
-        <figure key={i} className="rounded-2xl border border-border bg-card p-6 shadow-soft">
-          <p className="font-display font-bold text-night">{t.name}</p>
+        <figure key={i} className="flex flex-col rounded-2xl border border-border bg-card p-6 shadow-soft">
+          <div className="flex gap-1" aria-label="5 estrelas">
+            {Array.from({ length: 5 }).map((_, s) => (
+              <Star key={s} className="size-4 fill-coral text-coral" aria-hidden="true" />
+            ))}
+          </div>
+          <p className="mt-3 font-display font-bold text-night">{t.name}</p>
           <p className="mt-2 text-muted-foreground">{t.action}</p>
           <p className="mt-2 font-medium">{t.result}</p>
+          {t.image && (
+            <img
+              src={t.image}
+              alt={`Conversa no WhatsApp com ${t.name}`}
+              loading="lazy"
+              className="mt-4 w-full max-w-[240px] self-center rounded-xl border border-border shadow-soft"
+            />
+          )}
         </figure>
       ))}
     </div>
