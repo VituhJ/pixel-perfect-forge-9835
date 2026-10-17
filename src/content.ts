@@ -207,4 +207,4 @@ export const footer = {
   copyright: "© [ANO] [SEU NOME OU EMPRESA]. Todos os direitos reservados.",
 };
 
-export const stickyBar = { price: "R$ 15 à vista", cta: "Quero meu kit" };
+export const stickyBar = { price: "R$ 15 à vista", cta: "Quero começar agora!" };
