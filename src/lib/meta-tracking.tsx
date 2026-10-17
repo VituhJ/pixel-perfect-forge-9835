@@ -4,6 +4,19 @@ import { CHECKOUT_URL, PRODUCT } from "@/content";
 
 export const META_PIXEL_ID = "1681485950220760";
 
+export const META_PIXEL_BOOTSTRAP = `
+  (function(f,b,e,v,n,t,s){
+    if (f.location.hostname === "127.0.0.1" || f.location.hostname === "localhost") return;
+    if (f.fbq) return;
+    n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;
+    n.push=n;n.loaded=true;n.version="2.0";n.queue=[];
+    t=b.createElement(e);t.async=true;t.src=v;
+    s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s);
+  })(window,document,"script","https://connect.facebook.net/en_US/fbevents.js");
+  if (window.fbq) window.fbq("init", "${META_PIXEL_ID}");
+`;
+
 type MetaEventName = "PageView" | "InitiateCheckout";
 
 type MetaEventInput = {
@@ -128,7 +141,7 @@ function loadMetaPixel() {
   if (window.fbq) return;
 
   const fbq: MetaPixelFunction = (...args: unknown[]) => {
-    if (fbq.callMethod) fbq.callMethod(...args);
+    if (fbq.callMethod) fbq.callMethod.apply(fbq, args);
     else fbq.queue?.push(args);
   };
   fbq.push = fbq;
