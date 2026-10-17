@@ -1,9 +1,34 @@
 // Todos os textos da página ficam aqui. Edite livremente.
 export const CHECKOUT_URL = "[COLE AQUI O LINK DO CHECKOUT]";
 
-export type Testimonial = { name: string; action: string; result: string; context?: "dor" | "bonus" };
-// Deixe vazio até ter depoimentos reais. Use context: "dor" ou "bonus" para os blocos 7 e 9.
-export const testimonials: Testimonial[] = [];
+export type Testimonial = { name: string; action: string; result: string; context?: "dor" | "bonus"; image?: string };
+// Use context: "dor" ou "bonus" para os blocos 7 e 9. image: print do depoimento (opcional).
+import amandaImg from "@/assets/depoimento-amanda.jpg.asset.json";
+import luanaImg from "@/assets/depoimento-luana.jpg.asset.json";
+import jonathanImg from "@/assets/depoimento-jonathan.jpg.asset.json";
+
+export const testimonials: Testimonial[] = [
+  {
+    name: "Amanda S.",
+    action: "Não fazia nem um mês que ela tinha aplicado o método para criar a influencer de IA.",
+    result: "Já passou de 12 mil seguidores e as parcerias começaram a chegar no direct. \"O segredo foi a constância e a personalidade dela. Vale cada centavo.\"",
+    image: amandaImg.url,
+  },
+  {
+    name: "Luana A.",
+    action: "Vivia gerando imagens em que o rosto da personagem saía diferente a cada foto.",
+    result: "Seguiu o passo a passo das ferramentas e o personagem ficou parecendo pessoa de verdade. \"Até meu irmão achou que era uma modelo real. Superou minhas expectativas!\"",
+    context: "dor",
+    image: luanaImg.url,
+  },
+  {
+    name: "Jonathan A.",
+    action: "Achou que, por causa da idade, seria muito difícil mexer com inteligência artificial.",
+    result: "Criou o personagem com o passo a passo e já conquistou seguidores em poucos dias. \"As pessoas comentam achando que é de verdade. Esse método nos ajuda de verdade.\"",
+    context: "dor",
+    image: jonathanImg.url,
+  },
+];
 
 export const PRODUCT = "Influenciador de IA Pronto em 1 Dia";
 
