@@ -58,7 +58,7 @@ export const hero = {
   subtitle:
     "Chega de gerar imagem que sai com um rosto diferente a cada vez. Você ganha o passo a passo, os prompts e os roteiros prontos para quem nunca usou IA.",
   cta: "Quero começar agora!",
-  badges: ["Kit em PDF", "Acesso imediato", "7 dias de garantia"],
+  badges: ["Acesso imediato", "7 dias de garantia"],
   phoneTag: "Personagem criado com IA",
   phoneCaption: "Oi! Eu sou sua nova criadora de conteúdo…",
 };
@@ -111,10 +111,7 @@ export const deliverables = {
   cta: "Quero acesso ao kit completo e aos 4 bônus",
   favoriteTag: "Bônus favorito",
   items: [
-    { label: "Entregável 01", cover: 0, title: "Ficha do personagem + descrição-âncora", text: "Um modelo para definir nome, aparência, voz e jeito de falar. Você termina com um parágrafo fixo que ajuda a manter o mesmo rosto em todas as imagens." },
-    { label: "Entregável 02", cover: 0, title: "20 prompts prontos de rosto e personagem", text: "Prompts para criar o rosto-base, a folha de personagem, cenas diferentes e capas. É só trocar os campos entre colchetes e colar." },
-    { label: "Entregável 03", cover: 0, title: "10 roteiros prontos de 30 segundos", text: "Apresentação, três erros, mito ou verdade, passo a passo e mais. Você escolhe, troca os campos e o personagem tem o que falar." },
-    { label: "Entregável 04", cover: 0, title: "Passo a passo do vídeo, legenda pronta e lista de ferramentas", text: "Da imagem ao vídeo publicado, com a legenda pronta e as ferramentas na ordem de uso." },
+    { label: "Entregável completo", cover: 0, title: "Kit completo para criar e publicar seu influenciador de IA", text: "Você recebe a ficha do personagem com descrição-âncora, 20 prompts prontos, 10 roteiros de 30 segundos e o passo a passo para transformar a imagem em vídeo, com legenda pronta e lista de ferramentas." },
     { label: "Bônus 01", cover: 1, title: "Guia passo a passo do zero ao primeiro vídeo", text: "Elimina a dificuldade: \"Mas e se eu nunca usei nenhuma ferramenta de IA?\" Inclui glossário, cronograma e solução para os 15 problemas mais comuns." },
     { label: "Bônus 02", cover: 2, title: "30 ideias de vídeos para o primeiro mês", text: "Economiza tempo: \"Mas e se eu não souber o que postar depois do primeiro vídeo?\" Cada ideia vem com gancho pronto." },
     { label: "Bônus 03", cover: 3, title: "Os 15 erros que deixam seu influenciador com cara de robô", text: "Evita o erro: \"Mas e se ficar artificial?\" Com as regras de uso responsável para você criar com segurança." },
@@ -177,12 +174,6 @@ export const guarantee = {
     "Preto no branco. Não estamos de brincadeira e queremos que você tenha bons resultados!",
   ],
   cta: "Quero testar sem risco",
-};
-
-export const mentor = {
-  title: "Conheça seu mentor(a)",
-  name: "[SEU NOME]",
-  text: "[ESCREVA 3 A 4 LINHAS REAIS SOBRE VOCÊ]",
 };
 
 export const choice = {

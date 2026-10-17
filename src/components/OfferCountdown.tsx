@@ -44,12 +44,12 @@ export function OfferCountdown() {
   const seconds = remainingSeconds === null ? "--" : String(remainingSeconds % 60).padStart(2, "0");
 
   return (
-    <div className="w-full border-b border-primary/20 bg-secondary text-night">
+    <div className="w-full border-b border-primary/30 bg-primary text-primary-foreground shadow-sm">
       <div className="mx-auto flex max-w-[1040px] items-center justify-center gap-3 px-4 py-3 sm:gap-4 md:px-5">
-        <Clock className="size-5 shrink-0 text-primary" aria-hidden="true" />
+        <Clock className="size-5 shrink-0 text-primary-foreground" aria-hidden="true" />
         <div className="min-w-0 text-left">
-          <p className="text-xs font-extrabold uppercase tracking-wide text-primary">{exclusiveOffer.label}</p>
-          <p className="mt-0.5 text-xs font-medium sm:text-sm" role="status">
+          <p className="text-xs font-extrabold uppercase tracking-wide text-primary-foreground">{exclusiveOffer.label}</p>
+          <p className="mt-0.5 text-xs font-medium text-primary-foreground/85 sm:text-sm" role="status">
             {expired ? exclusiveOffer.expired : exclusiveOffer.countdownLabel}
           </p>
         </div>
@@ -57,7 +57,7 @@ export function OfferCountdown() {
           role="timer"
           aria-live="off"
           aria-label={remainingSeconds === null ? exclusiveOffer.loadingLabel : `${minutes} minutos e ${seconds} segundos restantes`}
-          className="shrink-0 whitespace-nowrap rounded-xl bg-primary px-3 py-2 font-display text-2xl font-extrabold leading-none text-primary-foreground tabular-nums"
+          className="shrink-0 whitespace-nowrap rounded-xl bg-night px-3 py-2 font-display text-2xl font-extrabold leading-none text-night-foreground tabular-nums shadow-soft"
         >
           {minutes}:{seconds}
         </span>

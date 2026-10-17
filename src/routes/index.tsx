@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useRef, type ReactNode } from "react";
 import {
   Check, FileText, Zap, ShieldCheck, Camera, Sparkles, Clock, Lightbulb,
-  ShoppingCart, FolderOpen, Rocket, User, Star,
+  ShoppingCart, FolderOpen, Rocket, Star,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { OfferCountdown } from "@/components/OfferCountdown";
@@ -172,7 +172,7 @@ function Index() {
       <OfferCountdown />
       <main>
         {/* 1 Hero */}
-        <section className="px-4 pb-12 pt-6 md:px-5 md:pb-24 md:pt-12">
+        <section className="bg-primary/[0.08] px-4 pb-12 pt-6 md:px-5 md:pb-24 md:pt-12">
           <Reveal className="mx-auto grid max-w-[1040px] items-center gap-8 md:grid-cols-[1.45fr_1fr] md:gap-12">
             <div className="min-w-0">
               <h1 className="text-center text-[38px] font-extrabold leading-[1.06] tracking-normal sm:text-[46px] md:text-[58px] lg:text-[64px]">{c.hero.h1}</h1>
@@ -367,17 +367,7 @@ function Index() {
           <BuyButton label={c.guarantee.cta} />
         </Section>
 
-        {/* 15 Mentor */}
-        <Section alt narrow>
-          <H2>{c.mentor.title}</H2>
-          <div className="flex flex-col items-center gap-5 text-center md:gap-6">
-            <div className="flex size-24 items-center md:size-32 justify-center rounded-full bg-border"><User className="size-12 text-muted-foreground" /></div>
-            <h3 className="text-xl font-bold">{c.mentor.name}</h3>
-            <p className="text-base text-muted-foreground md:text-lg">{c.mentor.text}</p>
-          </div>
-        </Section>
-
-        {/* 16 Duas opções */}
+        {/* 15 Duas opções */}
         <Section>
           <H2>{c.choice.title}</H2>
           <div className="grid gap-4 md:grid-cols-2 md:gap-5">
