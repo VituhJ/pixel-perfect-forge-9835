@@ -14,7 +14,14 @@ export const META_PIXEL_BOOTSTRAP = `
     t=b.createElement(e);t.async=true;t.src=v;
     s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s);
   })(window,document,"script","https://connect.facebook.net/en_US/fbevents.js");
-  if (window.fbq) window.fbq("init", "${META_PIXEL_ID}");
+  if (window.fbq) {
+    window.fbq("init", "${META_PIXEL_ID}");
+    var pageViewEventId = "pageview:" + (window.crypto && window.crypto.randomUUID
+      ? window.crypto.randomUUID()
+      : Date.now() + "-" + Math.random().toString(36).slice(2));
+    window.__META_INITIAL_PAGEVIEW_EVENT_ID = pageViewEventId;
+    window.fbq("track", "PageView", {}, { eventID: pageViewEventId });
+  }
 `;
 
 type MetaEventName = "PageView" | "InitiateCheckout";
@@ -32,6 +39,7 @@ declare global {
   interface Window {
     fbq?: MetaPixelFunction;
     _fbq?: MetaPixelFunction;
+    __META_INITIAL_PAGEVIEW_EVENT_ID?: string;
   }
 }
 
@@ -200,15 +208,20 @@ export function MetaTracking() {
     initialized.current = true;
     loadMetaPixel();
 
-    const sendEvent = (eventName: MetaEventName) => {
-      const eventId = createEventId(eventName.toLowerCase());
+    const sendEvent = (
+      eventName: MetaEventName,
+      eventId = createEventId(eventName.toLowerCase()),
+      browserEventAlreadySent = false,
+    ) => {
       const fbp = ensureFbp();
       const fbc = ensureFbc();
       const customData = eventName === "InitiateCheckout"
         ? { currency: "BRL", value: 15, content_name: PRODUCT, content_type: "product" }
         : {};
 
-      window.fbq?.("track", eventName, customData, { eventID: eventId });
+      if (!browserEventAlreadySent) {
+        window.fbq?.("track", eventName, customData, { eventID: eventId });
+      }
       void sendServerEvent({
         data: {
           eventName,
@@ -223,7 +236,12 @@ export function MetaTracking() {
       });
     };
 
-    sendEvent("PageView");
+    const initialPageViewEventId = window.__META_INITIAL_PAGEVIEW_EVENT_ID;
+    sendEvent(
+      "PageView",
+      initialPageViewEventId || createEventId("pageview"),
+      Boolean(initialPageViewEventId),
+    );
 
     const handleCheckoutClick = (event: MouseEvent) => {
       const target = event.target;
