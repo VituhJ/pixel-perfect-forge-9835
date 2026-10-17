@@ -38,13 +38,6 @@ export const seo = {
     "Crie seu personagem virtual com IA e publique o primeiro vídeo, sem aparecer e sem experiência. Kit em PDF com prompts, roteiros e 4 bônus.",
 };
 
-export const exclusiveOffer = {
-  label: "Oferta exclusiva",
-  countdownLabel: "Acaba em:",
-  expired: "Tempo encerrado",
-  loadingLabel: "Carregando o tempo restante",
-};
-
 export const covers = [
   "Influenciador de IA Pronto em 1 Dia",
   "Guia: do Zero ao Primeiro Vídeo",
