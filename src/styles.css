@@ -127,4 +127,26 @@ h1, h2, h3 { font-family: var(--font-display); color: var(--color-night); letter
 }
 @media (prefers-reduced-motion: reduce) {
   .reveal { opacity: 1; transform: none; transition: none; }
+  .animate-soft-pulse { animation: none; }
+}
+
+@media (max-width: 767px) {
+  .sales-page {
+    --purchase-bar-height: calc(73px + env(safe-area-inset-bottom, 0px));
+    padding-bottom: calc(var(--purchase-bar-height) + 16px);
+    scroll-padding-bottom: calc(var(--purchase-bar-height) + 16px);
+  }
+
+  html {
+    scroll-padding-bottom: calc(89px + env(safe-area-inset-bottom, 0px));
+  }
+
+  .mobile-purchase-bar {
+    height: var(--purchase-bar-height);
+    padding-bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+  }
+
+  .sales-page a, .sales-page section {
+    scroll-margin-bottom: calc(var(--purchase-bar-height) + 16px);
+  }
 }
