@@ -6,6 +6,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { OfferCountdown } from "@/components/OfferCountdown";
+import { MetaTracking } from "@/lib/meta-tracking";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import * as c from "@/content";
 import kitCover from "@/assets/kit-influenciador-ia.png";
@@ -169,6 +170,7 @@ function Index() {
 
   return (
     <div className="sales-page min-h-screen bg-background md:pb-0">
+      <MetaTracking />
       <OfferCountdown />
       <main>
         {/* 1 Hero */}
