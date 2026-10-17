@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import { useEffect, useRef, type ReactNode } from "react";
 import {
   Check, FileText, Zap, ShieldCheck, Camera, Sparkles, Clock, Lightbulb,
   ShoppingCart, FolderOpen, Rocket, User, Star,
@@ -39,14 +39,14 @@ function Reveal({ children, className = "" }: { children: ReactNode; className?:
 
 function Section({ children, alt, id, narrow }: { children: ReactNode; alt?: boolean; id?: string; narrow?: boolean }) {
   return (
-    <section id={id} className={`px-5 py-16 md:py-24 ${alt ? "bg-secondary" : "bg-background"}`}>
+    <section id={id} className={`px-4 py-8 md:px-5 md:py-24 ${alt ? "bg-secondary" : "bg-background"}`}>
       <Reveal className={`mx-auto ${narrow ? "max-w-[720px]" : "max-w-[1040px]"}`}>{children}</Reveal>
     </section>
   );
 }
 
 function H2({ children }: { children: ReactNode }) {
-  return <h2 className="mx-auto mb-10 max-w-[720px] text-center text-2xl font-extrabold leading-tight md:text-4xl">{children}</h2>;
+  return <h2 className="mx-auto mb-5 max-w-[720px] md:mb-10 text-center text-2xl font-extrabold leading-tight md:text-4xl">{children}</h2>;
 }
 
 function BuyButton({ label }: { label: string }) {
@@ -61,8 +61,8 @@ function BuyButton({ label }: { label: string }) {
     return () => io.disconnect();
   }, []);
   return (
-    <div className="mt-10 flex justify-center">
-      <Button asChild variant="cta" size="xl">
+    <div className="mt-5 flex justify-center md:mt-10">
+      <Button asChild variant="cta" size="xl" className="min-h-12 px-5 py-3 md:min-h-14 md:px-8 md:py-4">
         <a ref={ref} href={c.CHECKOUT_URL} target="_blank" rel="noopener noreferrer">{label}</a>
       </Button>
     </div>
@@ -90,8 +90,8 @@ function Logo() {
 
 function Phone() {
   return (
-    <div className="mx-auto w-[268px] rounded-[2.75rem] bg-night p-3 shadow-hero ring-1 ring-night/25 md:w-[320px]" aria-hidden="true">
-      <div className="bg-screen relative aspect-[9/16] overflow-hidden rounded-[2.25rem] ring-1 ring-black/20">
+    <div className="mx-auto w-[200px] rounded-[2.75rem] bg-night p-3 shadow-hero ring-1 ring-night/25 md:w-[320px]" aria-hidden="true">
+      <div className="bg-screen relative aspect-[9/16] overflow-hidden rounded-[2.25rem] ring-1 ring-night/20">
         <div className="absolute left-1/2 top-2 h-5 w-20 -translate-x-1/2 rounded-full bg-night" />
         {/* personagem abstrato */}
         <svg viewBox="0 0 200 300" className="absolute inset-x-0 bottom-0 w-full">
@@ -115,15 +115,15 @@ function Phone() {
 
 function TestimonialCards({ items }: { items: c.Testimonial[] }) {
   return (
-    <div className="grid gap-5 md:grid-cols-2">
+    <div className="grid gap-3 md:grid-cols-2 md:gap-5">
       {items.map((t, i) => (
-        <figure key={i} className="flex flex-col rounded-2xl border border-border bg-card p-6 shadow-soft">
+        <figure key={i} className="flex flex-col rounded-2xl border border-border bg-card p-4 shadow-soft md:p-6">
           <div className="flex gap-1" aria-label="5 estrelas">
             {Array.from({ length: 5 }).map((_, s) => (
               <Star key={s} className="size-4 fill-coral text-coral" aria-hidden="true" />
             ))}
           </div>
-          <p className="mt-3 font-display font-bold text-night">{t.name}</p>
+          <p className="mt-2 font-display font-bold md:mt-3 text-night">{t.name}</p>
           <p className="mt-2 text-muted-foreground">{t.action}</p>
           <p className="mt-2 font-medium">{t.result}</p>
           {t.image && (
@@ -143,11 +143,11 @@ function TestimonialCards({ items }: { items: c.Testimonial[] }) {
 function PriceBlock({ id }: { id: string }) {
   return (
     <Section id={id} narrow>
-      <div className="space-y-5 text-center text-lg text-muted-foreground">
+      <div className="space-y-3 text-center text-base md:space-y-5 md:text-lg text-muted-foreground">
         {c.price.paragraphs.map((p) => <p key={p}>{p}</p>)}
       </div>
-      <div className="mt-10 flex justify-center"><Logo /></div>
-      <div className="mx-auto mt-8 max-w-md rounded-3xl border-2 border-primary bg-card p-8 text-center shadow-soft">
+      <div className="mt-5 flex justify-center md:mt-10"><Logo /></div>
+      <div className="mx-auto mt-5 max-w-md md:mt-8 rounded-3xl border-2 border-primary bg-card p-5 text-center md:p-8 shadow-soft">
         <p className="text-lg font-semibold text-muted-foreground line-through">{c.price.from}</p>
         <p className="mt-3 text-sm font-bold tracking-widest text-primary">{c.price.forLabel}</p>
         <p className="font-display text-6xl font-extrabold text-night md:text-7xl">{c.price.value}</p>
@@ -160,27 +160,6 @@ function PriceBlock({ id }: { id: string }) {
 
 /* ---------- page ---------- */
 function Index() {
-  const [showBar, setShowBar] = useState(false);
-
-  useEffect(() => {
-    const onScroll = () => {
-      const d = document.getElementById("entregaveis");
-      const hide = ["preco-1", "preco-2"].map((id) => document.getElementById(id));
-      if (!d) return;
-      const passed = d.getBoundingClientRect().bottom < 0;
-      const vh = window.innerHeight;
-      const inPrice = hide.some((el) => {
-        if (!el) return false;
-        const r = el.getBoundingClientRect();
-        return r.top < vh && r.bottom > 0;
-      });
-      setShowBar(passed && !inPrice);
-    };
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
   const dor = c.testimonials.filter((t) => t.context === "dor");
   const bonus = c.testimonials.filter((t) => t.context === "bonus");
   const forIcons = [Camera, Lightbulb, Clock, Sparkles];
@@ -188,23 +167,28 @@ function Index() {
   const badgeIcons = [FileText, Zap, ShieldCheck];
 
   return (
-    <div className="min-h-screen bg-background pb-24 md:pb-0">
-      <header className="px-5 py-4">
+    <div className="sales-page min-h-screen bg-background md:pb-0">
+      <header className="px-4 py-3 md:px-5 md:py-4">
         <div className="mx-auto flex max-w-[1040px] items-center"><Logo /></div>
       </header>
 
       <main>
         {/* 1 Hero */}
-        <section className="px-5 pb-16 pt-6 md:pb-24 md:pt-12">
-          <Reveal className="mx-auto grid max-w-[1040px] items-center gap-12 md:grid-cols-[1.45fr_1fr]">
-            <div>
-              <h1 className="text-[38px] font-extrabold leading-[1.06] tracking-tight sm:text-[46px] md:text-[58px] lg:text-[64px]">{c.hero.h1}</h1>
-              <p className="mt-6 text-lg leading-relaxed text-muted-foreground">{c.hero.subtitle}</p>
-              <ul className="mt-8 flex flex-wrap gap-3">
+        <section className="px-4 pb-8 pt-3 md:px-5 md:pb-24 md:pt-12">
+          <Reveal className="mx-auto grid max-w-[1040px] items-center gap-6 md:grid-cols-[1.45fr_1fr] md:gap-12">
+            <div className="min-w-0">
+              <h1 className="text-[38px] font-extrabold leading-[1.06] tracking-normal sm:text-[46px] md:text-[58px] lg:text-[64px]">{c.hero.h1}</h1>
+              <p className="mt-4 text-base leading-relaxed md:mt-6 md:text-lg text-muted-foreground">{c.hero.subtitle}</p>
+              <div className="mt-4 md:hidden">
+                <Button asChild variant="cta" size="xl" className="min-h-12 px-5 py-3">
+                  <a href={c.CHECKOUT_URL} target="_blank" rel="noopener noreferrer">{c.price.cta}</a>
+                </Button>
+              </div>
+              <ul className="mt-4 flex flex-wrap gap-2 md:mt-8 md:gap-3">
                 {c.hero.badges.map((b, i) => {
                   const I = badgeIcons[i] ?? Sparkles;
                   return (
-                    <li key={b} className="inline-flex items-center gap-2 rounded-full bg-secondary px-4 py-2 text-sm font-semibold text-night">
+                    <li key={b} className="inline-flex items-center gap-2 rounded-full bg-secondary px-3 py-1.5 text-sm md:px-4 md:py-2 font-semibold text-night">
                       <I className="size-4 text-primary" /> {b}
                     </li>
                   );
@@ -218,9 +202,9 @@ function Index() {
         {/* 2 Passos */}
         <Section alt>
           <H2>{c.steps.title}</H2>
-          <ol className="relative grid gap-5 md:grid-cols-5">
+          <ol className="relative grid gap-3 md:grid-cols-5 md:gap-5">
             {c.steps.items.map(([t, d], i) => (
-              <li key={t} className="flex gap-4 rounded-2xl border border-border bg-card p-5 shadow-soft md:flex-col">
+              <li key={t} className="flex gap-3 rounded-2xl border border-border bg-card p-4 shadow-soft md:flex-col md:gap-4 md:p-5">
                 <span className="flex size-11 shrink-0 items-center justify-center rounded-full bg-primary font-display text-lg font-bold text-primary-foreground">{i + 1}</span>
                 <div>
                   <h3 className="font-bold">{t}</h3>
@@ -234,10 +218,10 @@ function Index() {
         {/* 3 Resumo */}
         <Section>
           <H2>{c.summary.title}</H2>
-          <div className="grid min-w-0 items-center gap-12 md:grid-cols-2">
-            <ul className="min-w-0 space-y-4">
+          <div className="grid min-w-0 items-center gap-6 md:grid-cols-2 md:gap-12">
+            <ul className="min-w-0 space-y-3 md:space-y-4">
               {c.summary.items.map((it) => (
-                <li key={it} className="flex gap-3 text-[17px]">
+                <li key={it} className="flex gap-3 text-base md:text-[17px]">
                   <Check className="mt-1 size-5 shrink-0 text-primary" strokeWidth={3} /> <span>{it}</span>
                 </li>
               ))}
@@ -256,11 +240,11 @@ function Index() {
 
         {/* 4 Perfeito para */}
         <Section alt>
-          <div className="grid gap-5 md:grid-cols-2">
+          <div className="grid gap-3 md:grid-cols-2 md:gap-5">
             {c.perfectFor.map((p) => (
-              <div key={p} className="rounded-3xl bg-card p-8 shadow-soft">
-                <Star className="mb-4 size-7 text-primary" />
-                <p className="font-display text-xl font-bold leading-snug text-night">{p}</p>
+              <div key={p} className="rounded-3xl bg-card p-5 shadow-soft md:p-8">
+                <Star className="mb-3 size-7 md:mb-4 text-primary" />
+                <p className="font-display text-lg font-bold leading-snug md:text-xl text-night">{p}</p>
               </div>
             ))}
           </div>
@@ -277,10 +261,10 @@ function Index() {
         {/* 6 Agitação */}
         <Section narrow>
           <h2 className="text-center text-2xl font-extrabold leading-tight md:text-4xl">{c.agitation.title}</h2>
-          <div className="mt-10 space-y-6 text-lg leading-relaxed">
+          <div className="mt-5 space-y-4 text-base leading-relaxed md:mt-10 md:space-y-6 md:text-lg">
             {c.agitation.paragraphs.map((p) => <p key={p}>{p}</p>)}
           </div>
-          <p className="mt-10 rounded-2xl bg-primary p-6 text-center font-display text-xl font-bold text-primary-foreground">{c.agitation.highlight}</p>
+          <p className="mt-5 rounded-2xl bg-primary p-4 text-center font-display text-lg md:mt-10 md:p-6 md:text-xl font-bold text-primary-foreground">{c.agitation.highlight}</p>
         </Section>
 
         {/* 7 Depoimento dor */}
@@ -289,17 +273,17 @@ function Index() {
         {/* 8 Entregáveis */}
         <Section alt id="entregaveis">
           <H2>{c.deliverables.title}</H2>
-          <div className="grid gap-5 md:grid-cols-2">
+          <div className="grid gap-3 md:grid-cols-2 md:gap-5">
             {c.deliverables.items.map((d) => (
-              <article key={d.label} className={`relative flex gap-5 rounded-2xl border bg-card p-5 shadow-soft ${d.favorite ? "border-2 border-coral" : "border-border"}`}>
+              <article key={d.label} className={`relative grid grid-cols-[minmax(0,1fr)_auto] gap-x-3 gap-y-2 rounded-2xl border bg-card p-4 shadow-soft md:flex md:gap-5 md:p-5 ${d.favorite ? "border-2 border-coral" : "border-border"}`}>
                 {d.favorite && (
                   <span className="absolute -top-3 right-5 rounded-full bg-cta px-3 py-1 text-xs font-bold text-cta-foreground">{c.deliverables.favoriteTag}</span>
                 )}
-                <Cover i={d.cover} size="sm" />
-                <div>
-                  <p className="text-xs font-bold uppercase tracking-widest text-primary">{d.label}</p>
-                  <h3 className="mt-1 font-bold leading-snug">{d.title}</h3>
-                  <p className="mt-2 text-muted-foreground">{d.text}</p>
+                <div className="col-start-2 row-start-1 shrink-0 md:order-none"><Cover i={d.cover} size="sm" /></div>
+                <div className="col-start-1 row-start-1 min-w-0 md:[display:block] max-md:contents">
+                  <p className="col-start-1 row-start-1 self-start text-xs font-bold uppercase tracking-widest text-primary">{d.label}</p>
+                  <h3 className="col-start-1 row-start-1 mt-5 self-start font-bold leading-snug md:mt-1">{d.title}</h3>
+                  <p className="col-span-2 mt-0 text-muted-foreground md:mt-2">{d.text}</p>
                 </div>
               </article>
             ))}
@@ -313,13 +297,13 @@ function Index() {
         {/* 10 Para quem é */}
         <Section>
           <H2>{c.forWho.title}</H2>
-          <ul className="grid gap-5 md:grid-cols-2">
+          <ul className="grid gap-3 md:grid-cols-2 md:gap-5">
             {c.forWho.items.map((t, i) => {
               const I = forIcons[i] ?? Sparkles;
               return (
-                <li key={t} className="flex gap-4 rounded-2xl border border-border p-6">
+                <li key={t} className="flex gap-3 rounded-2xl border border-border p-4 md:gap-4 md:p-6">
                   <span className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-secondary"><I className="size-5 text-primary" /></span>
-                  <p className="text-[17px]">{t}</p>
+                  <p className="min-w-0 text-base md:text-[17px]">{t}</p>
                 </li>
               );
             })}
@@ -331,13 +315,13 @@ function Index() {
           <H2>{c.recap.title}</H2>
           <ul className="divide-y divide-border rounded-2xl bg-card shadow-soft">
             {c.recap.items.map((r) => (
-              <li key={r.name} className="flex items-center gap-4 p-4">
+              <li key={r.name} className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 p-3 md:flex md:gap-4 md:p-4">
                 <Cover i={r.cover} size="sm" />
-                <span className="flex-1 font-medium">{r.name}</span>
-                <span className="font-display font-bold text-night">{r.value}</span>
+                <span className="min-w-0 flex-1 font-medium">{r.name}</span>
+                <span className="shrink-0 whitespace-nowrap font-display font-bold text-night">{r.value}</span>
               </li>
             ))}
-            <li className="flex items-center justify-between gap-4 rounded-b-2xl bg-night p-5 text-night-foreground">
+            <li className="flex items-center justify-between gap-4 rounded-b-2xl bg-night p-4 text-night-foreground md:p-5">
               <span className="font-semibold">{c.recap.totalLabel}</span>
               <span className="font-display text-2xl font-extrabold">{c.recap.total}</span>
             </li>
@@ -350,11 +334,11 @@ function Index() {
         {/* 13 Acesso */}
         <Section alt>
           <H2>{c.access.title}</H2>
-          <ol className="grid gap-5 md:grid-cols-3">
+          <ol className="grid gap-3 md:grid-cols-3 md:gap-5">
             {c.access.items.map(([t, d], i) => {
               const I = accessIcons[i] ?? Sparkles;
               return (
-                <li key={t} className="rounded-2xl bg-card p-6 text-center shadow-soft">
+                <li key={t} className="rounded-2xl bg-card p-4 text-center shadow-soft md:p-6">
                   <span className="mx-auto flex size-14 items-center justify-center rounded-full bg-primary"><I className="size-6 text-primary-foreground" /></span>
                   <h3 className="mt-4 font-extrabold tracking-wide">{t}</h3>
                   <p className="mt-2 text-muted-foreground">{d}</p>
@@ -367,14 +351,14 @@ function Index() {
         {/* 14 Garantia */}
         <Section narrow>
           <div className="text-center">
-            <svg viewBox="0 0 160 160" className="mx-auto size-40" role="img" aria-label={c.guarantee.seal}>
+            <svg viewBox="0 0 160 160" className="mx-auto size-28 md:size-40" role="img" aria-label={c.guarantee.seal}>
               <circle cx="80" cy="80" r="76" fill="currentColor" className="text-primary" />
               <circle cx="80" cy="80" r="64" fill="none" stroke="currentColor" strokeWidth="2" strokeDasharray="4 4" className="text-primary-foreground" />
               <text x="80" y="92" textAnchor="middle" fontSize="38" fontWeight="800" fill="currentColor" className="font-display text-primary-foreground">{c.guarantee.seal}</text>
             </svg>
-            <h2 className="mt-6 text-2xl font-extrabold md:text-4xl">{c.guarantee.title}</h2>
+            <h2 className="mt-4 text-2xl font-extrabold md:mt-6 md:text-4xl">{c.guarantee.title}</h2>
           </div>
-          <div className="mt-8 space-y-5 text-center text-lg leading-relaxed">
+          <div className="mt-8 space-y-3 text-center text-base md:space-y-5 md:text-lg leading-relaxed">
             {c.guarantee.paragraphs.map((p) => <p key={p}>{p}</p>)}
           </div>
           <BuyButton label={c.guarantee.cta} />
@@ -383,25 +367,25 @@ function Index() {
         {/* 15 Mentor */}
         <Section alt narrow>
           <H2>{c.mentor.title}</H2>
-          <div className="flex flex-col items-center gap-6 text-center">
-            <div className="flex size-32 items-center justify-center rounded-full bg-border"><User className="size-12 text-muted-foreground" /></div>
+          <div className="flex flex-col items-center gap-3 text-center md:gap-6">
+            <div className="flex size-24 items-center md:size-32 justify-center rounded-full bg-border"><User className="size-12 text-muted-foreground" /></div>
             <h3 className="text-xl font-bold">{c.mentor.name}</h3>
-            <p className="text-lg text-muted-foreground">{c.mentor.text}</p>
+            <p className="text-base text-muted-foreground md:text-lg">{c.mentor.text}</p>
           </div>
         </Section>
 
         {/* 16 Duas opções */}
         <Section>
           <H2>{c.choice.title}</H2>
-          <div className="grid gap-5 md:grid-cols-2">
+          <div className="grid gap-3 md:grid-cols-2 md:gap-5">
             {c.choice.options.map(([t, d], i) => (
-              <div key={t} className={`rounded-3xl p-8 ${i === 1 ? "border-2 border-primary bg-secondary shadow-soft" : "border border-border"}`}>
+              <div key={t} className={`rounded-3xl p-5 md:p-8 ${i === 1 ? "border-2 border-primary bg-secondary shadow-soft" : "border border-border"}`}>
                 <h3 className={`text-lg font-extrabold ${i === 1 ? "text-primary" : ""}`}>{t}</h3>
                 <p className="mt-3 text-[17px]">{d}</p>
               </div>
             ))}
           </div>
-          <div className="mx-auto mt-10 max-w-[720px] space-y-3 text-center text-lg">
+          <div className="mx-auto mt-5 max-w-[720px] space-y-3 text-center text-base md:mt-10 md:text-lg">
             {c.choice.paragraphs.map((p) => <p key={p}>{p}</p>)}
           </div>
           <BuyButton label={c.choice.cta} />
@@ -413,10 +397,10 @@ function Index() {
         {/* 18 FAQ */}
         <Section alt narrow>
           <H2>{c.faq.title}</H2>
-          <Accordion type="single" collapsible className="rounded-2xl bg-card px-5 shadow-soft">
+          <Accordion type="single" collapsible className="rounded-2xl bg-card px-4 shadow-soft md:px-5">
             {c.faq.items.map(([q, a], i) => (
               <AccordionItem key={q} value={`q${i}`}>
-                <AccordionTrigger className="py-5 text-left text-base font-semibold">{q}</AccordionTrigger>
+                <AccordionTrigger className="py-4 text-left text-base md:py-5 font-semibold">{q}</AccordionTrigger>
                 <AccordionContent className="text-base text-muted-foreground">{a}</AccordionContent>
               </AccordionItem>
             ))}
@@ -424,10 +408,10 @@ function Index() {
         </Section>
       </main>
 
-      <footer className="bg-night px-5 py-12 text-sm text-night-foreground/80">
+      <footer className="bg-night px-4 py-8 text-sm md:px-5 md:py-12 text-night-foreground/80">
         <div className="mx-auto max-w-[720px] space-y-3 text-center">
           {c.footer.lines.map((l) => <p key={l}>{l}</p>)}
-          <p className="flex justify-center gap-6 pt-2">
+          <p className="flex flex-wrap justify-center gap-3 pt-2 md:gap-6">
             {c.footer.links.map((l) => <a key={l.label} href={l.href} className="underline">{l.label}</a>)}
           </p>
           <p className="pt-2">{c.footer.copyright}</p>
@@ -435,11 +419,11 @@ function Index() {
       </footer>
 
       {/* Barra fixa mobile */}
-      <div className={`fixed inset-x-0 bottom-0 z-50 border-t border-border bg-background/95 px-4 py-3 backdrop-blur transition-transform md:hidden ${showBar ? "translate-y-0" : "translate-y-full"}`}>
-        <div className="flex items-center gap-3">
-          <span className="font-display text-lg font-extrabold text-night">{c.stickyBar.price}</span>
-          <Button asChild variant="cta" className="min-h-12 flex-1">
-            <a href={c.CHECKOUT_URL} target="_blank" rel="noopener noreferrer" tabIndex={showBar ? 0 : -1}>{c.stickyBar.cta}</a>
+      <div className="mobile-purchase-bar fixed inset-x-0 bottom-0 z-50 border-t border-border bg-background/95 px-4 pt-3 backdrop-blur md:hidden">
+        <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3">
+          <span className="min-w-0 whitespace-nowrap font-display text-base font-extrabold text-night">{c.stickyBar.price}</span>
+          <Button asChild variant="cta" className="h-12 min-w-[156px] px-4">
+            <a href={c.CHECKOUT_URL} target="_blank" rel="noopener noreferrer">{c.stickyBar.cta}</a>
           </Button>
         </div>
       </div>
