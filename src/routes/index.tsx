@@ -183,9 +183,9 @@ function Index() {
       <main>
         {/* 1 Hero */}
         <section className="px-5 pb-16 pt-6 md:pb-24 md:pt-12">
-          <Reveal className="mx-auto grid max-w-[1040px] items-center gap-12 md:grid-cols-[1.25fr_1fr]">
+          <Reveal className="mx-auto grid max-w-[1040px] items-center gap-12 md:grid-cols-[1.45fr_1fr]">
             <div>
-              <h1 className="text-[40px] font-extrabold leading-[1.05] tracking-tight sm:text-[52px] md:text-[64px] lg:text-[72px]">{c.hero.h1}</h1>
+              <h1 className="text-[38px] font-extrabold leading-[1.06] tracking-tight sm:text-[46px] md:text-[58px] lg:text-[64px]">{c.hero.h1}</h1>
               <p className="mt-6 text-lg leading-relaxed text-muted-foreground">{c.hero.subtitle}</p>
               <ul className="mt-8 flex flex-wrap gap-3">
                 {c.hero.badges.map((b, i) => {
