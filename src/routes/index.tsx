@@ -10,6 +10,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import * as c from "@/content";
 import kitCover from "@/assets/kit-influenciador-ia.png";
 import bonusCover from "@/assets/mockup-bonus-influenciador-ia.png";
+import influencerPortrait from "@/assets/influenciadora-hero.png";
 
 export const Route = createFileRoute("/")({
   component: Index,
@@ -98,14 +99,8 @@ function Phone() {
   return (
     <div className="mx-auto w-[240px] rounded-[2.75rem] bg-night p-3 shadow-hero ring-1 ring-night/25 md:w-[320px]" aria-hidden="true">
       <div className="bg-screen relative aspect-[9/16] overflow-hidden rounded-[2.25rem] ring-1 ring-night/20">
+        <img src={influencerPortrait} alt="" fetchPriority="high" className="absolute inset-0 size-full object-cover object-top" />
         <div className="absolute left-1/2 top-2 h-5 w-20 -translate-x-1/2 rounded-full bg-night" />
-        {/* personagem abstrato */}
-        <svg viewBox="0 0 200 300" className="absolute inset-x-0 bottom-0 w-full">
-          <circle cx="100" cy="110" r="44" fill="currentColor" className="text-night-foreground" opacity="0.92" />
-          <path d="M60 95 Q100 40 140 95 Q130 70 100 66 Q70 70 60 95Z" fill="currentColor" className="text-night" />
-          <path d="M30 300 Q30 180 100 175 Q170 180 170 300Z" fill="currentColor" className="text-coral" />
-          <rect x="85" y="150" width="30" height="30" fill="currentColor" className="text-night-foreground" opacity="0.92" />
-        </svg>
         <div className="absolute inset-x-3 bottom-16 rounded-lg bg-night/70 px-3 py-2 text-center text-xs font-semibold text-night-foreground">
           {c.hero.phoneCaption}
         </div>
