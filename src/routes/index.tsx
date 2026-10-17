@@ -90,8 +90,8 @@ function Logo() {
 
 function Phone() {
   return (
-    <div className="mx-auto w-[240px] rounded-[2.5rem] bg-night p-3 shadow-soft md:w-[280px]" aria-hidden="true">
-      <div className="bg-screen relative aspect-[9/16] overflow-hidden rounded-[2rem]">
+    <div className="mx-auto w-[268px] rounded-[2.75rem] bg-night p-3 shadow-hero ring-1 ring-night/25 md:w-[320px]" aria-hidden="true">
+      <div className="bg-screen relative aspect-[9/16] overflow-hidden rounded-[2.25rem] ring-1 ring-black/20">
         <div className="absolute left-1/2 top-2 h-5 w-20 -translate-x-1/2 rounded-full bg-night" />
         {/* personagem abstrato */}
         <svg viewBox="0 0 200 300" className="absolute inset-x-0 bottom-0 w-full">
@@ -185,7 +185,7 @@ function Index() {
         <section className="px-5 pb-16 pt-6 md:pb-24 md:pt-12">
           <Reveal className="mx-auto grid max-w-[1040px] items-center gap-12 md:grid-cols-[1.25fr_1fr]">
             <div>
-              <h1 className="text-[32px] font-extrabold leading-[1.12] sm:text-[40px] md:text-[52px] lg:text-[56px]">{c.hero.h1}</h1>
+              <h1 className="text-[40px] font-extrabold leading-[1.05] tracking-tight sm:text-[52px] md:text-[64px] lg:text-[72px]">{c.hero.h1}</h1>
               <p className="mt-6 text-lg leading-relaxed text-muted-foreground">{c.hero.subtitle}</p>
               <ul className="mt-8 flex flex-wrap gap-3">
                 {c.hero.badges.map((b, i) => {
