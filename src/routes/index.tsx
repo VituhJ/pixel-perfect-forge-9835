@@ -174,12 +174,12 @@ function Index() {
 
   return (
     <div className="sales-page min-h-screen bg-background md:pb-0">
+      <OfferCountdown />
       <main>
         {/* 1 Hero */}
         <section className="px-4 pb-12 pt-6 md:px-5 md:pb-24 md:pt-12">
           <Reveal className="mx-auto grid max-w-[1040px] items-center gap-8 md:grid-cols-[1.45fr_1fr] md:gap-12">
             <div className="min-w-0">
-              <OfferCountdown />
               <h1 className="text-center text-[38px] font-extrabold leading-[1.06] tracking-normal sm:text-[46px] md:text-[58px] lg:text-[64px]">{c.hero.h1}</h1>
               <p className="mt-4 text-center text-base leading-relaxed text-muted-foreground md:mt-6 md:text-lg">{c.hero.subtitle}</p>
               <ul className="mt-5 flex flex-wrap gap-3 md:mt-8 md:gap-3">

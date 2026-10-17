@@ -44,8 +44,8 @@ export function OfferCountdown() {
   const seconds = remainingSeconds === null ? "--" : String(remainingSeconds % 60).padStart(2, "0");
 
   return (
-    <div className="mb-5 flex justify-center md:mb-6">
-      <div className="inline-flex max-w-full items-center gap-3 rounded-2xl border border-primary/20 bg-secondary px-4 py-3 text-night shadow-soft sm:gap-4">
+    <div className="w-full border-b border-primary/20 bg-secondary text-night">
+      <div className="mx-auto flex max-w-[1040px] items-center justify-center gap-3 px-4 py-3 sm:gap-4 md:px-5">
         <Clock className="size-5 shrink-0 text-primary" aria-hidden="true" />
         <div className="min-w-0 text-left">
           <p className="text-xs font-extrabold uppercase tracking-wide text-primary">{exclusiveOffer.label}</p>
