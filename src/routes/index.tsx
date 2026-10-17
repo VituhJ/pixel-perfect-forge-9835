@@ -321,9 +321,9 @@ function Index() {
                 <span className="shrink-0 whitespace-nowrap font-display font-bold text-night">{r.value}</span>
               </li>
             ))}
-            <li className="flex items-center justify-between gap-4 rounded-b-2xl bg-night p-4 text-night-foreground md:p-5">
-              <span className="font-semibold">{c.recap.totalLabel}</span>
-              <span className="font-display text-2xl font-extrabold">{c.recap.total}</span>
+            <li className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 rounded-b-2xl bg-night p-4 text-night-foreground md:flex md:justify-between md:gap-4 md:p-5">
+              <span className="min-w-0 font-semibold">{c.recap.totalLabel}</span>
+              <span className="shrink-0 whitespace-nowrap font-display text-2xl font-extrabold">{c.recap.total}</span>
             </li>
           </ul>
         </Section>
@@ -358,7 +358,7 @@ function Index() {
             </svg>
             <h2 className="mt-4 text-2xl font-extrabold md:mt-6 md:text-4xl">{c.guarantee.title}</h2>
           </div>
-          <div className="mt-8 space-y-3 text-center text-base md:space-y-5 md:text-lg leading-relaxed">
+          <div className="mt-5 space-y-3 text-center text-base md:mt-8 md:space-y-5 md:text-lg leading-relaxed">
             {c.guarantee.paragraphs.map((p) => <p key={p}>{p}</p>)}
           </div>
           <BuyButton label={c.guarantee.cta} />
