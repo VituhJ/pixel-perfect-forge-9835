@@ -200,11 +200,7 @@ export const footer = {
     "Este material é educativo e não garante resultados financeiros. Ferramentas, planos e regras das plataformas mudam; confira sempre as informações atuais nos sites oficiais.",
     "Os personagens mostrados são ilustrações fictícias criadas com IA.",
   ],
-  links: [
-    { label: "[Termos de uso]", href: "#" },
-    { label: "[Política de privacidade]", href: "#" },
-  ],
-  copyright: "© [ANO] [SEU NOME OU EMPRESA]. Todos os direitos reservados.",
+  copyright: "© 2026 Influenciador de IA Pronto em 1 Dia. Todos os direitos reservados.",
 };
 
 export const stickyBar = { price: "R$ 15 à vista", cta: "Quero começar agora!" };

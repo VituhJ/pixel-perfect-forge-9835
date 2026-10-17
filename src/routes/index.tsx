@@ -404,10 +404,8 @@ function Index() {
       <footer className="bg-night px-4 py-8 text-sm md:px-5 md:py-12 text-night-foreground/80">
         <div className="mx-auto max-w-[720px] space-y-3 text-center">
           {c.footer.lines.map((l) => <p key={l}>{l}</p>)}
-          <p className="flex flex-wrap justify-center gap-3 pt-2 md:gap-6">
-            {c.footer.links.map((l) => <a key={l.label} href={l.href} className="underline">{l.label}</a>)}
-          </p>
-          <p className="pt-2">{c.footer.copyright}</p>
+          <div className="mx-auto my-4 h-px w-16 bg-primary/60" aria-hidden="true" />
+          <p className="font-medium text-night-foreground">{c.footer.copyright}</p>
         </div>
       </footer>
 
