@@ -5,6 +5,7 @@ import {
   ShoppingCart, FolderOpen, Rocket, User, Star,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { OfferCountdown } from "@/components/OfferCountdown";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import * as c from "@/content";
 import kitCover from "@/assets/kit-influenciador-ia.png";
@@ -93,14 +94,6 @@ function DeliverableMockup({ isBonus }: { isBonus: boolean }) {
   );
 }
 
-function Logo() {
-  return (
-    <div className="inline-flex items-center rounded-xl border-2 border-dashed border-border px-4 py-2 text-sm font-semibold text-muted-foreground">
-      {c.logoPlaceholder}
-    </div>
-  );
-}
-
 function Phone() {
   return (
     <div className="mx-auto w-[240px] rounded-[2.75rem] bg-night p-3 shadow-hero ring-1 ring-night/25 md:w-[320px]" aria-hidden="true">
@@ -160,7 +153,6 @@ function PriceBlock({ id }: { id: string }) {
       <div className="space-y-4 text-center text-base leading-relaxed md:space-y-5 md:text-lg text-muted-foreground">
         {c.price.paragraphs.map((p) => <p key={p}>{p}</p>)}
       </div>
-      <div className="mt-7 flex justify-center md:mt-10"><Logo /></div>
       <div className="mx-auto mt-6 max-w-md rounded-3xl border-2 border-primary bg-card p-6 text-center shadow-soft md:mt-8 md:p-8">
         <p className="text-lg font-semibold text-muted-foreground line-through">{c.price.from}</p>
         <p className="mt-3 text-sm font-bold tracking-widest text-primary">{c.price.forLabel}</p>
@@ -182,15 +174,12 @@ function Index() {
 
   return (
     <div className="sales-page min-h-screen bg-background md:pb-0">
-      <header className="px-4 py-3 md:px-5 md:py-4">
-        <div className="mx-auto flex max-w-[1040px] items-center"><Logo /></div>
-      </header>
-
       <main>
         {/* 1 Hero */}
         <section className="px-4 pb-12 pt-6 md:px-5 md:pb-24 md:pt-12">
           <Reveal className="mx-auto grid max-w-[1040px] items-center gap-8 md:grid-cols-[1.45fr_1fr] md:gap-12">
             <div className="min-w-0">
+              <OfferCountdown />
               <h1 className="text-center text-[38px] font-extrabold leading-[1.06] tracking-normal sm:text-[46px] md:text-[58px] lg:text-[64px]">{c.hero.h1}</h1>
               <p className="mt-4 text-center text-base leading-relaxed text-muted-foreground md:mt-6 md:text-lg">{c.hero.subtitle}</p>
               <ul className="mt-5 flex flex-wrap gap-3 md:mt-8 md:gap-3">
