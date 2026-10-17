@@ -125,6 +125,11 @@ const sendMetaConversionEvent = createServerFn({ method: "POST" })
       return { sent: false, reason: "meta_api_error" as const };
     }
 
+    const result = await response.json().catch(() => ({})) as { events_received?: number };
+    console.info("Meta Conversions API aceitou o evento", {
+      eventName: data.eventName,
+      eventsReceived: result.events_received ?? null,
+    });
     return { sent: true };
   });
 
