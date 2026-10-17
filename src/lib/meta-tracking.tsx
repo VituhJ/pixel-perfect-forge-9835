@@ -23,6 +23,7 @@ type MetaEventInput = {
   eventName: MetaEventName;
   eventId: string;
   eventSourceUrl: string;
+  clientUserAgent?: string;
   fbp?: string;
   fbc?: string;
 };
@@ -58,6 +59,7 @@ function validateMetaEvent(data: MetaEventInput): MetaEventInput {
     eventName: data.eventName,
     eventId: data.eventId,
     eventSourceUrl: sourceUrl.toString().slice(0, 2048),
+    clientUserAgent: data.clientUserAgent?.slice(0, 512),
     fbp: data.fbp?.slice(0, 255),
     fbc: data.fbc?.slice(0, 255),
   };
@@ -74,8 +76,12 @@ const sendMetaConversionEvent = createServerFn({ method: "POST" })
     const { getRequest } = await import("@tanstack/react-start/server");
     const request = getRequest();
     const forwardedFor = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim();
-    const clientIp = request.headers.get("cf-connecting-ip") || forwardedFor;
-    const userAgent = request.headers.get("user-agent");
+    const clientIp = request.headers.get("cf-connecting-ip")
+      || request.headers.get("true-client-ip")
+      || request.headers.get("x-real-ip")
+      || request.headers.get("fly-client-ip")
+      || forwardedFor;
+    const userAgent = data.clientUserAgent || request.headers.get("user-agent");
 
     const userData: Record<string, string> = {};
     if (clientIp) userData.client_ip_address = clientIp;
@@ -137,6 +143,27 @@ function getCookie(name: string) {
   return value ? decodeURIComponent(value.slice(prefix.length)) : undefined;
 }
 
+function setTrackingCookie(name: string, value: string) {
+  const secure = window.location.protocol === "https:" ? "; Secure" : "";
+  document.cookie = `${name}=${encodeURIComponent(value)}; Max-Age=7776000; Path=/; SameSite=Lax${secure}`;
+  return value;
+}
+
+function ensureFbp() {
+  const existing = getCookie("_fbp");
+  if (existing) return existing;
+  const random = Math.floor(100000000 + Math.random() * 900000000);
+  return setTrackingCookie("_fbp", `fb.1.${Date.now()}.${random}`);
+}
+
+function ensureFbc() {
+  const existing = getCookie("_fbc");
+  if (existing) return existing;
+  const fbclid = new URLSearchParams(window.location.search).get("fbclid");
+  if (!fbclid) return undefined;
+  return setTrackingCookie("_fbc", `fb.1.${Date.now()}.${fbclid}`);
+}
+
 function loadMetaPixel() {
   if (window.fbq) return;
 
@@ -170,6 +197,8 @@ export function MetaTracking() {
 
     const sendEvent = (eventName: MetaEventName) => {
       const eventId = createEventId(eventName.toLowerCase());
+      const fbp = ensureFbp();
+      const fbc = ensureFbc();
       const customData = eventName === "InitiateCheckout"
         ? { currency: "BRL", value: 15, content_name: PRODUCT, content_type: "product" }
         : {};
@@ -180,8 +209,9 @@ export function MetaTracking() {
           eventName,
           eventId,
           eventSourceUrl: window.location.href,
-          fbp: getCookie("_fbp"),
-          fbc: getCookie("_fbc"),
+          clientUserAgent: window.navigator.userAgent,
+          fbp,
+          fbc,
         },
       }).catch(() => {
         // Browser tracking continues even if the server event is temporarily unavailable.
