@@ -30,9 +30,9 @@ type MetaEventInput = {
   eventName: MetaEventName;
   eventId: string;
   eventSourceUrl: string;
-  clientUserAgent?: string;
-  fbp?: string;
-  fbc?: string;
+  clientUserAgent?: string | undefined;
+  fbp?: string | undefined;
+  fbc?: string | undefined;
 };
 
 declare global {
@@ -76,11 +76,11 @@ function validateMetaEvent(data: MetaEventInput): MetaEventInput {
 const sendMetaConversionEvent = createServerFn({ method: "POST" })
   .validator(validateMetaEvent)
   .handler(async ({ data }) => {
-    const accessToken = process.env.META_CAPI_ACCESS_TOKEN;
+    const accessToken = process.env["META_CAPI_ACCESS_TOKEN"];
     if (!accessToken) return { sent: false, reason: "not_configured" as const };
 
-    const pixelId = process.env.META_PIXEL_ID || META_PIXEL_ID;
-    const apiVersion = process.env.META_GRAPH_API_VERSION || "v24.0";
+    const pixelId = process.env["META_PIXEL_ID"] || META_PIXEL_ID;
+    const apiVersion = process.env["META_GRAPH_API_VERSION"] || "v24.0";
     const { getRequest } = await import("@tanstack/react-start/server");
     const request = getRequest();
     const forwardedFor = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim();
@@ -92,10 +92,10 @@ const sendMetaConversionEvent = createServerFn({ method: "POST" })
     const userAgent = data.clientUserAgent || request.headers.get("user-agent");
 
     const userData: Record<string, string> = {};
-    if (clientIp) userData.client_ip_address = clientIp;
-    if (userAgent) userData.client_user_agent = userAgent;
-    if (data.fbp) userData.fbp = data.fbp;
-    if (data.fbc) userData.fbc = data.fbc;
+    if (clientIp) userData["client_ip_address"] = clientIp;
+    if (userAgent) userData["client_user_agent"] = userAgent;
+    if (data.fbp) userData["fbp"] = data.fbp;
+    if (data.fbc) userData["fbc"] = data.fbc;
 
     const event: Record<string, unknown> = {
       event_name: data.eventName,
@@ -107,7 +107,7 @@ const sendMetaConversionEvent = createServerFn({ method: "POST" })
     };
 
     if (data.eventName === "InitiateCheckout") {
-      event.custom_data = {
+      event["custom_data"] = {
         currency: "BRL",
         value: 15,
         content_name: PRODUCT,
@@ -116,7 +116,7 @@ const sendMetaConversionEvent = createServerFn({ method: "POST" })
     }
 
     const body: Record<string, unknown> = { data: [event] };
-    if (process.env.META_TEST_EVENT_CODE) body.test_event_code = process.env.META_TEST_EVENT_CODE;
+    if (process.env["META_TEST_EVENT_CODE"]) body["test_event_code"] = process.env["META_TEST_EVENT_CODE"];
 
     const endpoint = new URL(`https://graph.facebook.com/${apiVersion}/${pixelId}/events`);
     endpoint.searchParams.set("access_token", accessToken);
