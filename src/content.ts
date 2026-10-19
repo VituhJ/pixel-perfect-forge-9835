@@ -56,6 +56,30 @@ export const hero = {
   phoneCaption: "Oi! Eu sou sua nova criadora de conteúdo…",
 };
 
+export const learn = {
+  title: "O que você vai aprender a criar com este método",
+  subtitle:
+    "Você vai aprender a montar cada etapa do seu influenciador de IA, mesmo começando do zero.",
+  items: [
+    {
+      title: "Um personagem virtual único",
+      text: "Defina nome, aparência, personalidade e estilo de comunicação.",
+    },
+    {
+      title: "Imagens com o mesmo rosto",
+      text: "Use uma descrição-âncora para manter a identidade visual do personagem.",
+    },
+    {
+      title: "Vídeos curtos com roteiro e voz",
+      text: "Transforme a imagem em um vídeo falado com roteiro pronto para adaptar.",
+    },
+    {
+      title: "Conteúdo pronto para publicar",
+      text: "Finalize o vídeo com legenda e uma ideia clara para postar nas redes sociais.",
+    },
+  ],
+};
+
 export const steps = {
   title: "Esses são os 5 passos para publicar o seu primeiro vídeo com um influenciador de IA",
   items: [

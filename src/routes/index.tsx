@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useRef, type ReactNode } from "react";
 import {
   Check, FileText, Zap, ShieldCheck, Camera, Sparkles, Clock, Lightbulb,
-  ShoppingCart, FolderOpen, Rocket, Star,
+  ShoppingCart, FolderOpen, Rocket, Star, UserRound, Images, Video, Captions,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { OfferCountdown } from "@/components/OfferCountdown";
@@ -167,6 +167,7 @@ function Index() {
   const forIcons = [Camera, Lightbulb, Clock, Sparkles];
   const accessIcons = [ShoppingCart, FolderOpen, Rocket];
   const badgeIcons = [FileText, Zap, ShieldCheck];
+  const learnIcons = [UserRound, Images, Video, Captions];
 
   return (
     <div className="sales-page min-h-screen bg-background md:pb-0">
@@ -204,7 +205,29 @@ function Index() {
           </Reveal>
         </section>
 
-        {/* 2 Passos */}
+        {/* 2 O que vai aprender */}
+        <Section>
+          <H2>{c.learn.title}</H2>
+          <p className="mx-auto -mt-3 mb-7 max-w-[680px] text-center text-base leading-relaxed text-muted-foreground md:-mt-5 md:mb-10 md:text-lg">
+            {c.learn.subtitle}
+          </p>
+          <div className="grid gap-4 sm:grid-cols-2 md:gap-5">
+            {c.learn.items.map((item, i) => {
+              const Icon = learnIcons[i] ?? Sparkles;
+              return (
+                <article key={item.title} className="rounded-3xl border border-border bg-card p-5 shadow-soft md:p-7">
+                  <div className="flex size-12 items-center justify-center rounded-2xl bg-primary/10 text-primary md:size-14">
+                    <Icon className="size-6 md:size-7" strokeWidth={2.2} aria-hidden="true" />
+                  </div>
+                  <h3 className="mt-4 font-display text-lg font-extrabold leading-snug text-night md:text-xl">{item.title}</h3>
+                  <p className="mt-2 leading-relaxed text-muted-foreground">{item.text}</p>
+                </article>
+              );
+            })}
+          </div>
+        </Section>
+
+        {/* 3 Passos */}
         <Section alt>
           <H2>{c.steps.title}</H2>
           <ol className="relative grid gap-4 md:grid-cols-5 md:gap-5">
