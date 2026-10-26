@@ -1,17 +1,41 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useRef, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import {
-  Check, FileText, Zap, ShieldCheck, Camera, Sparkles, Clock, Lightbulb,
-  ShoppingCart, FolderOpen, Rocket, Star, UserRound, Images, Video, Captions,
+  ArrowDown,
+  ArrowRight,
+  Check,
+  FileText,
+  Sparkles,
+  ShieldCheck,
+  Play,
+  Pause,
+  Volume2,
+  VolumeX,
+  Plus,
+  ChevronLeft,
+  ChevronRight,
+  Star,
+  BookOpen,
+  FolderOpen,
+  X,
+  Camera,
+  Lightbulb,
+  Clock,
+  Rocket,
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { OfferCountdown } from "@/components/OfferCountdown";
 import { MetaTracking } from "@/lib/meta-tracking";
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { OfferCountdown } from "@/components/OfferCountdown";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 import * as c from "@/content";
 import kitCover from "@/assets/kit-influenciador-ia.png";
 import bonusCover from "@/assets/mockup-bonus-influenciador-ia.png";
 import influencerPortrait from "@/assets/influenciadora-hero.png";
+import "@/school-layout.css";
 
 export const Route = createFileRoute("/")({
   component: Index,
@@ -27,422 +51,678 @@ export const Route = createFileRoute("/")({
   }),
 });
 
-/* ---------- helpers ---------- */
-function Reveal({ children, className = "" }: { children: ReactNode; className?: string }) {
-  const ref = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const io = new IntersectionObserver(([e]) => {
-      if (e?.isIntersecting) { el.classList.add("is-visible"); io.disconnect(); }
-    }, { threshold: 0.12 });
-    io.observe(el);
-    return () => io.disconnect();
-  }, []);
-  return <div ref={ref} className={`reveal ${className}`}>{children}</div>;
-}
+const MEDIA = "/media/characters-reference";
+// Keep the original testimonial images available in local previews too.
+const testimonialImage = (url: string) =>
+  url.startsWith("/__l5e/assets-v1/") ? `/images/${url.split("/").pop()}` : url;
+const characters = [
+  ["CS004", "Jean Phil"],
+  ["CS006", "Jeen Rockfelly"],
+  ["CS027", "Edmond Lebon"],
+  ["CS011", "Bill Smith"],
+  ["CS007", "Ched Chin"],
+  ["CS008", "Don Nuger"],
+  ["CS001", "Luther Longford"],
+  ["CS014", "Terrence Jackson"],
+  ["CS016", "Abu Yalla"],
+  ["CS015", "Milton Bumford"],
+  ["CS023", "Silky"],
+  ["CS020", "Ludmila Glitterova"],
+  ["CS010", "Sebastián Perfil"],
+  ["CS025", "Kwon Blaze Kim"],
+  ["CS018", "Arthur Teddington"],
+  ["CS002", "Severin Moskovsky"],
+  ["CS003", "Mr. Twirlo"],
+  ["CS026", "Derek Mercer"],
+  ["CS012", "Mildred Ashkettle"],
+  ["CS017", "Abu Shalab"],
+  ["CS029", "Magnus Brick"],
+  ["CS005", "Eggman"],
+  ["CS013", "Marcel Phil"],
+  ["CS024", "Lord"],
+  ["CS019", "Tony Ravioliano"],
+  ["CS021", "Huncle-berry Cliff"],
+  ["CS028", "Percival Fawnsworth"],
+  ["CS022", "Nikola Mykonos"],
+  ["CS009", "Barnaby Nugget"],
+];
+const reels = [
+  { file: "b", creator: "@abu.shalab", url: "https://www.instagram.com/reel/DdxCLS5NMRz/" },
+  { file: "a", creator: "@jean_philanthrope", url: "https://www.instagram.com/reel/Ddb0QUyqnhG/" },
+  { file: "c", creator: "@lord.farquaad.sol", url: "https://www.instagram.com/reel/DdwhswgBSFq/" },
+];
 
-function Section({ children, alt, id, narrow }: { children: ReactNode; alt?: boolean; id?: string; narrow?: boolean }) {
+function Buy({ children = c.hero.cta, pale = false }: { children?: ReactNode; pale?: boolean }) {
   return (
-    <section id={id} className={`px-4 py-12 md:px-5 md:py-24 ${alt ? "bg-secondary" : "bg-background"}`}>
-      <Reveal className={`mx-auto ${narrow ? "max-w-[720px]" : "max-w-[1040px]"}`}>{children}</Reveal>
+    <a
+      className={`school-buy ${pale ? "school-buy--pale" : ""}`}
+      href={c.CHECKOUT_URL}
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      {children}
+      <ArrowRight size={20} aria-hidden="true" />
+    </a>
+  );
+}
+function Heading({
+  label,
+  children,
+  intro,
+}: {
+  label: string;
+  children: ReactNode;
+  intro?: string;
+}) {
+  return (
+    <header className="school-heading">
+      <span className="school-eyebrow">
+        <Sparkles size={14} aria-hidden="true" />
+        {label}
+      </span>
+      <h2>{children}</h2>
+      {intro && <p>{intro}</p>}
+    </header>
+  );
+}
+function CharacterRow({ items, row }: { items: string[][]; row: number }) {
+  const track = useRef<HTMLDivElement>(null);
+  const move = (dir: number) =>
+    track.current?.scrollBy({
+      left: dir * 440,
+      behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches
+        ? "instant"
+        : "smooth",
+    });
+  return (
+    <div className="school-cast-row">
+      <div className="school-row-controls">
+        <button
+          type="button"
+          onClick={() => move(-1)}
+          aria-label={`Personagens anteriores, fila ${row}`}
+        >
+          <ChevronLeft />
+        </button>
+        <span>Arraste para explorar</span>
+        <button
+          type="button"
+          onClick={() => move(1)}
+          aria-label={`Próximos personagens, fila ${row}`}
+        >
+          <ChevronRight />
+        </button>
+      </div>
+      <div
+        className="school-cast-track"
+        ref={track}
+        tabIndex={0}
+        role="region"
+        aria-label={`Galeria de personagens, fila ${row}`}
+      >
+        <a href="#entregaveis" className="school-character school-character--open">
+          <Plus size={42} />
+          <strong>O próximo pode ser seu.</strong>
+          <span>Crie seu personagem</span>
+          <ArrowRight />
+        </a>
+        {items.map(([code, name]) => (
+          <figure className="school-character" key={code}>
+            <img
+              src={`${MEDIA}/${code}.webp`}
+              width="480"
+              height="640"
+              alt={`Personagem de referência: ${name}`}
+              loading="lazy"
+              draggable="false"
+            />
+            <figcaption>
+              {name}
+              <span>Personagem de IA · referência</span>
+            </figcaption>
+          </figure>
+        ))}
+      </div>
+    </div>
+  );
+}
+function Reel({ reel }: { reel: (typeof reels)[number] }) {
+  const ref = useRef<HTMLVideoElement>(null);
+  const [muted, setMuted] = useState(true);
+  const [playing, setPlaying] = useState(false);
+  const [failed, setFailed] = useState(false);
+  useEffect(() => {
+    const video = ref.current;
+    if (!video) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry?.isIntersecting) {
+          video.pause();
+          return;
+        }
+        if (!video.getAttribute("src")) {
+          video.src = `${MEDIA}/reel-${reel.file}.mp4`;
+          video.load();
+        }
+      },
+      { rootMargin: "120px" },
+    );
+    observer.observe(video);
+    return () => {
+      observer.disconnect();
+      video.pause();
+    };
+  }, [reel.file]);
+  const togglePlay = () => {
+    const video = ref.current;
+    if (!video) return;
+    if (video.paused) {
+      video.play().catch(() => setFailed(true));
+    } else video.pause();
+  };
+  const toggleSound = () => {
+    const video = ref.current;
+    if (!video) return;
+    const nextMuted = !video.muted;
+    if (!nextMuted)
+      document.querySelectorAll<HTMLVideoElement>(".school-reel video").forEach((other) => {
+        if (other !== video) other.muted = true;
+      });
+    video.muted = nextMuted;
+  };
+  return (
+    <figure className="school-reel">
+      <div className="school-reel-tag">
+        <Sparkles size={14} />
+        Personagem em movimento
+      </div>
+      <div className="school-phone">
+        <video
+          ref={ref}
+          poster={`${MEDIA}/reel-${reel.file}-poster.jpg`}
+          muted
+          playsInline
+          loop
+          preload="none"
+          onPlay={() => setPlaying(true)}
+          onPause={() => setPlaying(false)}
+          onVolumeChange={() => setMuted(ref.current?.muted ?? true)}
+          onError={() => setFailed(true)}
+          aria-label={`Vídeo de referência de ${reel.creator}`}
+        />
+        <span className="school-phone-notch" aria-hidden="true" />
+        {!playing && !failed && (
+          <button
+            className="school-play"
+            type="button"
+            onClick={togglePlay}
+            aria-label={`Reproduzir vídeo de ${reel.creator}`}
+          >
+            <Play fill="currentColor" />
+          </button>
+        )}
+        {failed && (
+          <div className="school-video-error">
+            Vídeo indisponível neste navegador.
+            <a href={reel.url} target="_blank" rel="noopener noreferrer">
+              Ver o vídeo original ↗
+            </a>
+          </div>
+        )}
+        <div className="school-video-controls">
+          <button
+            type="button"
+            onClick={togglePlay}
+            aria-label={playing ? "Pausar vídeo" : "Reproduzir vídeo"}
+          >
+            {playing ? <Pause size={18} /> : <Play size={18} />}
+          </button>
+          <span>{reel.creator}</span>
+          <button
+            type="button"
+            onClick={toggleSound}
+            aria-label={muted ? "Ativar som" : "Silenciar"}
+            aria-pressed={!muted}
+          >
+            {muted ? <VolumeX size={18} /> : <Volume2 size={18} />}
+          </button>
+        </div>
+      </div>
+      <figcaption>
+        <a href={reel.url} target="_blank" rel="noopener noreferrer">
+          Vídeo original de {reel.creator} ↗
+        </a>
+      </figcaption>
+    </figure>
+  );
+}
+function Testimonials() {
+  return (
+    <section className="school-section school-desk">
+      <div className="school-wrap">
+        <Heading label="Relatos compartilhados">{c.testimonialsTitle}</Heading>
+        <div className="school-windows">
+          {c.testimonials.map((item, i) => (
+            <figure className="school-window" key={item.name}>
+              <div className="school-window-bar">
+                <span>
+                  <span className="school-status-dot" />
+                  relato_{i + 1}.txt
+                </span>
+                <span aria-hidden="true">— □ ×</span>
+              </div>
+              <div className="school-window-body">
+                <div className="school-stars" aria-label="5 estrelas">
+                  {Array.from({ length: 5 }, (_, k) => (
+                    <Star key={k} size={14} fill="currentColor" />
+                  ))}
+                </div>
+                <h3>{item.name}</h3>
+                <p>{item.action}</p>
+                <blockquote>{item.result}</blockquote>
+                {item.image && (
+                  <a
+                    href={testimonialImage(item.image)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={`Ampliar relato de ${item.name}`}
+                  >
+                    <img
+                      src={testimonialImage(item.image)}
+                      alt={`Conversa compartilhada por ${item.name}`}
+                      loading="lazy"
+                      width="240"
+                      height="430"
+                    />
+                  </a>
+                )}
+              </div>
+            </figure>
+          ))}
+        </div>
+      </div>
     </section>
   );
 }
-
-function H2({ children }: { children: ReactNode }) {
-  return <h2 className="mx-auto mb-7 max-w-[720px] text-center text-2xl font-extrabold leading-tight md:mb-10 md:text-4xl">{children}</h2>;
-}
-
-function BuyButton({ label }: { label: string }) {
-  const ref = useRef<HTMLAnchorElement>(null);
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const io = new IntersectionObserver(([e]) => {
-      if (e?.isIntersecting) { el.classList.add("animate-soft-pulse"); io.disconnect(); }
-    }, { threshold: 0.8 });
-    io.observe(el);
-    return () => io.disconnect();
-  }, []);
+function Index() {
+  const icons = [Camera, Lightbulb, Clock, Sparkles];
   return (
-    <div className="mt-7 flex justify-center md:mt-10">
-      <Button asChild variant="cta" size="xl" className="h-auto min-h-14 px-5 py-3 leading-snug md:px-8 md:py-4">
-        <a ref={ref} href={c.CHECKOUT_URL} target="_blank" rel="noopener noreferrer">{label}</a>
-      </Button>
-    </div>
-  );
-}
-
-function Cover({ i, size = "md" }: { i: number; size?: "sm" | "md" }) {
-  const dims = size === "sm" ? "w-14 h-[74px] p-1.5 text-[7px]" : "w-28 h-[148px] p-3 text-[11px]";
-  return (
-    <div className={`relative shrink-0 overflow-hidden rounded-lg bg-night shadow-soft ${dims}`} aria-hidden="true">
-      <div className="absolute -right-4 -top-4 size-12 rounded-full bg-primary md:size-14" />
-      <div className="absolute bottom-0 left-0 h-1 w-full bg-coral" />
-      <p className="relative mt-[40%] font-display font-bold leading-tight text-night-foreground">{c.covers[i]}</p>
-    </div>
-  );
-}
-
-function DeliverableMockup({ isBonus }: { isBonus: boolean }) {
-  return (
-    <div className="deliverable-mockup shrink-0" aria-hidden="true">
-      <div className="deliverable-book">
-        <img src={isBonus ? bonusCover : kitCover} alt="" className="size-full rounded-[inherit] object-cover" />
-        <span className="deliverable-book-spine" />
+    <div className="sales-page school-page">
+      <MetaTracking />
+      <div className="school-announcement">
+        <OfferCountdown />
       </div>
-    </div>
-  );
-}
-
-function Phone() {
-  return (
-    <div className="mx-auto w-[240px] rounded-[2.75rem] bg-night p-3 shadow-hero ring-1 ring-night/25 md:w-[320px]" aria-hidden="true">
-      <div className="bg-screen relative aspect-[9/16] overflow-hidden rounded-[2.25rem] ring-1 ring-night/20">
-        <img src={influencerPortrait} alt="" fetchPriority="high" className="absolute inset-0 size-full object-cover object-top" />
-        <div className="absolute left-1/2 top-2 h-5 w-20 -translate-x-1/2 rounded-full bg-night" />
-        <div className="absolute inset-x-3 bottom-16 rounded-lg bg-night/70 px-3 py-2 text-center text-xs font-semibold text-night-foreground">
-          {c.hero.phoneCaption}
-        </div>
-        <div className="absolute inset-x-0 bottom-4 flex justify-center">
-          <span className="inline-flex items-center gap-1 rounded-full bg-background/90 px-3 py-1 text-[11px] font-semibold text-night">
-            <Sparkles className="size-3 text-primary" /> {c.hero.phoneTag}
-          </span>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function TestimonialCards({ items }: { items: c.Testimonial[] }) {
-  return (
-    <div className="grid gap-3 md:grid-cols-2 md:gap-5">
-      {items.map((t, i) => (
-        <figure key={i} className={`flex flex-col rounded-2xl border border-border bg-card p-4 shadow-soft md:p-6 ${items.length === 1 ? "mx-auto w-full max-w-[560px] md:col-span-2" : ""}`}>
-          <div className="flex gap-1" aria-label="5 estrelas">
-            {Array.from({ length: 5 }).map((_, s) => (
-              <Star key={s} className="size-4 fill-coral text-coral" aria-hidden="true" />
+      <main>
+        <section className="school-hero" id="inicio">
+          <nav className="school-nav">
+            <a href="#inicio" className="school-brand">
+              <img src="/favicon.svg" alt="" width="30" height="30" />
+              INFLUENCIADOR<span>DE IA</span>
+            </a>
+            <a href="#entregaveis">
+              Conheça o kit <ArrowDown size={15} />
+            </a>
+          </nav>
+          <div className="school-hero-art" aria-hidden="true">
+            <span className="school-orbit school-orbit--one">
+              <img src={`${MEDIA}/CS004.webp`} alt="" />
+            </span>
+            <span className="school-orbit school-orbit--two">
+              <img src={`${MEDIA}/CS024.webp`} alt="" />
+            </span>
+            <div className="school-art-halo" />
+            <img className="school-hero-kit" src={kitCover} alt="" fetchPriority="high" />
+            <img className="school-hero-person" src={influencerPortrait} alt="" />
+            <span className="school-sticker">
+              COPIA
+              <br />E COLA <Sparkles size={18} />
+            </span>
+            <span className="school-art-star">✦</span>
+          </div>
+          <div className="school-hero-copy">
+            <span className="school-pill">
+              <span className="school-status-dot" />
+              SEU PERSONAGEM. SUAS IDEIAS.
+            </span>
+            <h1>
+              Seu primeiro vídeo com influenciador de IA em 1 dia,<em>só copiando e colando.</em>
+            </h1>
+            <p className="school-product-name">{c.PRODUCT}</p>
+            <p className="school-hero-description">{c.hero.subtitle}</p>
+            <div className="school-actions">
+              <Buy />
+              <a className="school-text-link" href="#demonstracao">
+                Veja os personagens em ação <ArrowDown size={17} />
+              </a>
+            </div>
+            <div className="school-trust">
+              <span>
+                <FileText size={16} />
+                Kit digital em PDF
+              </span>
+              {c.hero.badges.map((badge, i) => (
+                <span key={badge}>
+                  {i === 0 ? <Rocket size={16} /> : <ShieldCheck size={16} />}
+                  {badge}
+                </span>
+              ))}
+            </div>
+            <p className="school-hero-price">
+              Kit completo + 4 bônus por <strong>{c.price.value}</strong> à vista
+            </p>
+          </div>
+          <div className="school-cloud-edge" aria-hidden="true" />
+        </section>
+        <section className="school-section school-cast" id="aprender">
+          <Heading label="Uma ideia pode virar um personagem" intro={c.learn.subtitle}>
+            {c.learn.title}
+          </Heading>
+          <div className="school-learn school-wrap">
+            {c.learn.items.map((item, i) => (
+              <div key={item.title}>
+                <span>0{i + 1}</span>
+                <h3>{item.title}</h3>
+                <p>{item.text}</p>
+              </div>
             ))}
           </div>
-          <p className="mt-2 font-display font-bold md:mt-3 text-night">{t.name}</p>
-          <p className="mt-2 text-muted-foreground">{t.action}</p>
-          <p className="mt-2 font-medium">{t.result}</p>
-          {t.image && (
-            <img
-              src={t.image}
-              alt={`Conversa no WhatsApp com ${t.name}`}
-              loading="lazy"
-              onError={(event) => event.currentTarget.remove()}
-              className="mt-4 w-full max-w-[240px] self-center rounded-xl border border-border shadow-soft"
-            />
-          )}
-        </figure>
-      ))}
-    </div>
-  );
-}
-
-function PriceBlock({ id }: { id: string }) {
-  return (
-    <Section id={id} narrow>
-      <div className="space-y-4 text-center text-base leading-relaxed md:space-y-5 md:text-lg text-muted-foreground">
-        {c.price.paragraphs.map((p) => <p key={p}>{p}</p>)}
-      </div>
-      <div className="mx-auto mt-6 max-w-md rounded-3xl border-2 border-primary bg-card p-6 text-center shadow-soft md:mt-8 md:p-8">
-        <p className="text-lg font-semibold text-muted-foreground line-through">{c.price.from}</p>
-        <p className="mt-3 text-sm font-bold tracking-widest text-primary">{c.price.forLabel}</p>
-        <p className="font-display text-6xl font-extrabold text-night md:text-7xl">{c.price.value}</p>
-        <p className="mt-1 text-sm font-bold tracking-widest text-night">{c.price.suffix}</p>
-      </div>
-      <BuyButton label={c.price.cta} />
-    </Section>
-  );
-}
-
-/* ---------- page ---------- */
-function Index() {
-  const dor = c.testimonials.filter((t) => t.context === "dor");
-  const bonus = c.testimonials.filter((t) => t.context === "bonus");
-  const forIcons = [Camera, Lightbulb, Clock, Sparkles];
-  const accessIcons = [ShoppingCart, FolderOpen, Rocket];
-  const badgeIcons = [FileText, Zap, ShieldCheck];
-  const learnIcons = [UserRound, Images, Video, Captions];
-
-  return (
-    <div className="sales-page min-h-screen bg-background md:pb-0">
-      <MetaTracking />
-      <OfferCountdown />
-      <main>
-        {/* 1 Hero */}
-        <section className="bg-primary/[0.08] px-4 pb-12 pt-6 md:px-5 md:pb-24 md:pt-12">
-          <Reveal className="mx-auto grid max-w-[1040px] items-center gap-8 md:grid-cols-[1.45fr_1fr] md:gap-12">
-            <div className="min-w-0">
-              <h1 className="text-center text-[38px] font-extrabold leading-[1.06] tracking-normal sm:text-[46px] md:text-[58px] lg:text-[64px]">{c.hero.h1}</h1>
-              <p className="mt-4 text-center text-base leading-relaxed text-muted-foreground md:mt-6 md:text-lg">{c.hero.subtitle}</p>
-              <div className="mt-6 hidden justify-center md:flex">
-                <Button asChild variant="cta" size="xl" className="h-auto min-h-14 px-8 py-4 leading-snug">
-                  <a href={c.CHECKOUT_URL} target="_blank" rel="noopener noreferrer">{c.hero.cta}</a>
-                </Button>
-              </div>
-              <ul className="mt-5 flex flex-wrap gap-3 md:mt-5 md:justify-center md:gap-3">
-                {c.hero.badges.map((b, i) => {
-                  const I = badgeIcons[i] ?? Sparkles;
-                  return (
-                    <li key={b} className="inline-flex items-center gap-2 rounded-full bg-secondary px-3 py-1.5 text-sm md:px-4 md:py-2 font-semibold text-night">
-                      <I className="size-4 text-primary" /> {b}
+          <CharacterRow items={characters.slice(0, 15)} row={1} />
+          <CharacterRow items={characters.slice(15)} row={2} />
+          <p className="school-source">
+            Galeria visual da{" "}
+            <a href="https://charactersschool.com/" target="_blank" rel="noopener noreferrer">
+              Characters School
+            </a>
+            . Personagens de referência; não são personagens incluídos no kit.
+          </p>
+          <div className="school-center">
+            <Buy pale />
+          </div>
+        </section>
+        <section className="school-section school-reels" id="demonstracao">
+          <div className="school-wrap">
+            <Heading
+              label="Dê play nas referências"
+              intro="Explore diferentes estilos de personagens de IA, voz e movimento."
+            >
+              Personagens fictícios.<em>Vídeos que chamam atenção.</em>
+            </Heading>
+            <div className="school-phones">
+              {reels.map((reel) => (
+                <Reel key={reel.file} reel={reel} />
+              ))}
+            </div>
+            <p className="school-source">
+              Vídeos de terceiros, com os autores creditados. São referências criativas, não
+              demonstrações do kit nem resultados de compradores.
+            </p>
+            <div className="school-facts">
+              {[
+                ["20", "prompts prontos"],
+                ["10", "roteiros de 30 segundos"],
+                ["4", "bônus incluídos"],
+                ["7 dias", "de garantia"],
+              ].map(([number, label]) => (
+                <div key={label}>
+                  <strong>{number}</strong>
+                  <span>{label}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+        {c.testimonials.length > 0 && <Testimonials />}
+        <section className="school-section school-secret">
+          <div className="school-wrap school-secret-grid">
+            <div>
+              <span className="school-eyebrow">
+                <FolderOpen size={16} />
+                ABRA A SUA PASTA CRIATIVA
+              </span>
+              <h2>{c.agitation.title}</h2>
+              {c.agitation.paragraphs.map((p) => (
+                <p key={p}>{p}</p>
+              ))}
+              <p className="school-highlight">{c.agitation.highlight}</p>
+              <Buy />
+            </div>
+            <div className="school-folder">
+              <div className="school-folder-tab">SEU KIT / ACESSO IMEDIATO</div>
+              <div className="school-paper">
+                <BookOpen size={32} />
+                <h3>{c.summary.title}</h3>
+                <ul>
+                  {c.summary.items.map((item) => (
+                    <li key={item}>
+                      <Check size={18} />
+                      <span>{item}</span>
                     </li>
-                  );
-                })}
-              </ul>
-              <div className="mt-6 md:hidden">
-                <Button asChild variant="cta" size="xl" className="h-auto min-h-14 w-full whitespace-normal px-5 py-3 text-center leading-snug">
-                  <a href={c.CHECKOUT_URL} target="_blank" rel="noopener noreferrer">{c.stickyBar.cta}</a>
-                </Button>
+                  ))}
+                </ul>
               </div>
             </div>
-            <Phone />
-          </Reveal>
-        </section>
-
-        {/* 2 O que vai aprender */}
-        <Section>
-          <H2>{c.learn.title}</H2>
-          <p className="mx-auto -mt-3 mb-7 max-w-[680px] text-center text-base leading-relaxed text-muted-foreground md:-mt-5 md:mb-10 md:text-lg">
-            {c.learn.subtitle}
-          </p>
-          <div className="grid gap-4 sm:grid-cols-2 md:gap-5">
-            {c.learn.items.map((item, i) => {
-              const Icon = learnIcons[i] ?? Sparkles;
-              return (
-                <article key={item.title} className="rounded-3xl border border-border bg-card p-5 shadow-soft md:p-7">
-                  <div className="flex size-12 items-center justify-center rounded-2xl bg-primary/10 text-primary md:size-14">
-                    <Icon className="size-6 md:size-7" strokeWidth={2.2} aria-hidden="true" />
-                  </div>
-                  <h3 className="mt-4 font-display text-lg font-extrabold leading-snug text-night md:text-xl">{item.title}</h3>
-                  <p className="mt-2 leading-relaxed text-muted-foreground">{item.text}</p>
-                </article>
-              );
-            })}
           </div>
-        </Section>
-
-        {/* 3 Passos */}
-        <Section alt>
-          <H2>{c.steps.title}</H2>
-          <ol className="relative grid gap-4 md:grid-cols-5 md:gap-5">
-            {c.steps.items.map(([t, d], i) => (
-              <li key={t} className="flex gap-4 rounded-2xl border border-border bg-card p-5 shadow-soft md:flex-col md:gap-4 md:p-5">
-                <span className="flex size-11 shrink-0 items-center justify-center rounded-full bg-primary font-display text-lg font-bold text-primary-foreground">{i + 1}</span>
-                <div>
-                  <h3 className="font-bold">{t}</h3>
-                  <p className="mt-1 text-muted-foreground">{d}</p>
-                </div>
-              </li>
-            ))}
-          </ol>
-        </Section>
-
-        {/* 3 Resumo */}
-        <Section>
-          <H2>{c.summary.title}</H2>
-          <div className="grid min-w-0 items-center gap-8 md:grid-cols-2 md:gap-12">
-            <ul className="min-w-0 space-y-4">
-              {c.summary.items.map((it) => (
-                <li key={it} className="flex gap-3 text-base md:text-[17px]">
-                  <Check className="mt-1 size-5 shrink-0 text-primary" strokeWidth={3} /> <span>{it}</span>
+        </section>
+        <section className="school-section school-method" id="metodo">
+          <div className="school-wrap">
+            <Heading label="Da primeira ideia ao primeiro vídeo">{c.steps.title}</Heading>
+            <ol className="school-steps">
+              {c.steps.items.map(([title, description], i) => (
+                <li key={title}>
+                  <span className="school-step-number">0{i + 1}</span>
+                  <h3>{title}</h3>
+                  <p>{description}</p>
                 </li>
               ))}
-            </ul>
-            <div className="flex min-w-0 justify-center overflow-visible px-2 py-6">
-              <div className="flex origin-center scale-[0.72] sm:scale-[0.82] md:scale-100">
-                {c.covers.map((_, i) => (
-                  <div key={i} className="-ml-10 first:ml-0" style={{ transform: `rotate(${(i - 2) * 6}deg) translateY(${Math.abs(i - 2) * 8}px)` }}>
-                    <Cover i={i} />
-                  </div>
+            </ol>
+            <div className="school-perfect">
+              {c.perfectFor.map((text) => (
+                <p key={text}>
+                  <Sparkles size={23} />
+                  {text}
+                </p>
+              ))}
+            </div>
+          </div>
+        </section>
+        <section className="school-section school-deliverables" id="entregaveis">
+          <div className="school-wrap">
+            <Heading label="Um kit completo. Quatro bônus.">{c.deliverables.title}</Heading>
+            <div className="school-main-kit">
+              <div className="school-main-cover">
+                <img
+                  src={kitCover}
+                  alt="Capa do kit Influenciador de IA Pronto em 1 Dia"
+                  loading="lazy"
+                />
+              </div>
+              <div>
+                <span className="school-pill">{c.deliverables.items[0]?.label}</span>
+                <h3>{c.deliverables.items[0]?.title}</h3>
+                <p>{c.deliverables.items[0]?.text}</p>
+                <div className="school-format">
+                  <FileText size={20} />
+                  Material digital em PDF
+                </div>
+                <Buy>{c.deliverables.cta}</Buy>
+              </div>
+            </div>
+            <div className="school-bonus-grid">
+              {c.deliverables.items.slice(1).map((item) => (
+                <article className="school-bonus" key={item.label}>
+                  <span className="school-bonus-number">{item.label}</span>
+                  {item.favorite && (
+                    <span className="school-favorite">{c.deliverables.favoriteTag}</span>
+                  )}
+                  <img
+                    src={bonusCover}
+                    alt={`Mockup de ${item.title}`}
+                    loading="lazy"
+                    width="220"
+                    height="240"
+                  />
+                  <h3>{item.title}</h3>
+                  <p>{item.text}</p>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+        <section className="school-section school-who">
+          <div className="school-wrap">
+            <Heading label="Comece do ponto em que você está">{c.forWho.title}</Heading>
+            <div className="school-who-grid">
+              {c.forWho.items.map((text, i) => {
+                const Icon = icons[i] ?? Sparkles;
+                return (
+                  <article key={text}>
+                    <Icon size={28} />
+                    <p>{text}</p>
+                  </article>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+        <section className="school-section school-offer" id="oferta">
+          <div className="school-wrap">
+            <Heading label="Seu acesso começa aqui">
+              Tudo em um só kit.<em>Pronto para você começar.</em>
+            </Heading>
+            <div className="school-offer-grid">
+              <div className="school-checklist">
+                <span className="school-paper-tag">LISTA DE MATERIAIS</span>
+                <h3>{c.recap.title}</h3>
+                <ul>
+                  {c.recap.items.map((item) => (
+                    <li key={item.name}>
+                      <Check size={18} />
+                      <span>{item.name}</span>
+                      <strong>{item.value}</strong>
+                    </li>
+                  ))}
+                </ul>
+                <div className="school-total">
+                  <span>{c.recap.totalLabel}</span>
+                  <strong>{c.recap.total}</strong>
+                </div>
+                {c.price.paragraphs.map((text) => (
+                  <p key={text}>{text}</p>
                 ))}
+              </div>
+              <div className="school-price-ticket">
+                <div className="school-ticket-top">
+                  <BookOpen />
+                  <span>KIT DIGITAL + 4 BÔNUS</span>
+                  <span>01</span>
+                </div>
+                <img src={kitCover} alt="Kit completo" loading="lazy" width="180" height="180" />
+                <h3>{c.PRODUCT}</h3>
+                <p className="school-old-price">{c.price.from}</p>
+                <span className="school-price-label">{c.price.forLabel}</span>
+                <strong className="school-price-value">{c.price.value}</strong>
+                <span className="school-price-label">{c.price.suffix}</span>
+                <Buy>{c.price.cta}</Buy>
+                <p>
+                  <ShieldCheck size={16} />
+                  {c.guarantee.title}
+                </p>
+                <span className="school-barcode" aria-hidden="true" />
               </div>
             </div>
           </div>
-        </Section>
-
-        {/* 4 Perfeito para */}
-        <Section alt>
-          <div className="grid gap-4 md:grid-cols-2 md:gap-5">
-            {c.perfectFor.map((p) => (
-              <div key={p} className="rounded-3xl bg-card p-6 shadow-soft md:p-8">
-                <Star className="mb-3 size-7 md:mb-4 text-primary" />
-                <p className="font-display text-lg font-bold leading-snug md:text-xl text-night">{p}</p>
-              </div>
-            ))}
-          </div>
-        </Section>
-
-        {/* 5 Depoimentos */}
-        {c.testimonials.length > 0 && (
-          <Section>
-            <H2>{c.testimonialsTitle}</H2>
-            <TestimonialCards items={c.testimonials.filter((t) => !t.context)} />
-          </Section>
-        )}
-
-        {/* 6 Agitação */}
-        <Section narrow>
-          <h2 className="text-center text-2xl font-extrabold leading-tight md:text-4xl">{c.agitation.title}</h2>
-          <div className="mt-7 space-y-5 text-base leading-relaxed md:mt-10 md:space-y-6 md:text-lg">
-            {c.agitation.paragraphs.map((p) => <p key={p}>{p}</p>)}
-          </div>
-          <p className="mt-7 rounded-2xl bg-primary p-5 text-center font-display text-lg md:mt-10 md:p-6 md:text-xl font-bold text-primary-foreground">{c.agitation.highlight}</p>
-        </Section>
-
-        {/* 7 Depoimento dor */}
-        {dor.length > 0 && <Section alt><TestimonialCards items={dor} /></Section>}
-
-        {/* 8 Entregáveis */}
-        <Section alt id="entregaveis">
-          <H2>{c.deliverables.title}</H2>
-          <div className="grid gap-4 md:grid-cols-2 md:gap-5">
-            {c.deliverables.items.map((d) => (
-              <article key={d.label} className={`relative grid grid-cols-[104px_minmax(0,1fr)] items-center gap-4 rounded-2xl border bg-card p-4 shadow-soft sm:grid-cols-[128px_minmax(0,1fr)] sm:gap-5 sm:p-5 md:flex ${d.favorite ? "border-2 border-coral" : "border-border"}`}>
-                {d.favorite && (
-                  <span className="absolute -top-3 right-5 rounded-full bg-cta px-3 py-1 text-xs font-bold text-cta-foreground">{c.deliverables.favoriteTag}</span>
-                )}
-                <DeliverableMockup isBonus={d.label.startsWith("Bônus")} />
-                <div className="min-w-0 md:flex-1">
-                    <p className="text-xs font-bold uppercase tracking-widest text-primary">{d.label}</p>
-                    <h3 className="mt-2 font-bold leading-snug">{d.title}</h3>
-                    <p className="mt-3 text-sm leading-relaxed text-muted-foreground md:text-base">{d.text}</p>
-                </div>
-              </article>
-            ))}
-          </div>
-          <BuyButton label={c.deliverables.cta} />
-        </Section>
-
-        {/* 9 Depoimento bônus */}
-        {bonus.length > 0 && <Section><TestimonialCards items={bonus} /></Section>}
-
-        {/* 10 Para quem é */}
-        <Section>
-          <H2>{c.forWho.title}</H2>
-          <ul className="grid gap-4 md:grid-cols-2 md:gap-5">
-            {c.forWho.items.map((t, i) => {
-              const I = forIcons[i] ?? Sparkles;
-              return (
-                <li key={t} className="flex gap-4 rounded-2xl border border-border p-5 md:p-6">
-                  <span className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-secondary"><I className="size-5 text-primary" /></span>
-                  <p className="min-w-0 text-base md:text-[17px]">{t}</p>
+        </section>
+        <section className="school-section school-access">
+          <div className="school-wrap">
+            <Heading label="Simples do início ao acesso">{c.access.title}</Heading>
+            <ol>
+              {c.access.items.map(([title, description], i) => (
+                <li key={title}>
+                  <span>0{i + 1}</span>
+                  <h3>{title}</h3>
+                  <p>{description}</p>
                 </li>
-              );
-            })}
-          </ul>
-        </Section>
-
-        {/* 11 Recap */}
-        <Section alt narrow>
-          <H2>{c.recap.title}</H2>
-          <ul className="divide-y divide-border rounded-2xl bg-card shadow-soft">
-            {c.recap.items.map((r) => (
-              <li key={r.name} className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 p-4 md:flex md:gap-4 md:p-4">
-                <Cover i={r.cover} size="sm" />
-                <span className="min-w-0 flex-1 font-medium">{r.name}</span>
-                <span className="shrink-0 whitespace-nowrap font-display font-bold text-night">{r.value}</span>
-              </li>
-            ))}
-            <li className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 rounded-b-2xl bg-night p-5 text-night-foreground md:flex md:justify-between md:gap-4 md:p-5">
-              <span className="min-w-0 font-semibold">{c.recap.totalLabel}</span>
-              <span className="shrink-0 whitespace-nowrap font-display text-2xl font-extrabold">{c.recap.total}</span>
-            </li>
-          </ul>
-        </Section>
-
-        {/* 12 Preço */}
-        <PriceBlock id="preco-1" />
-
-        {/* 13 Acesso */}
-        <Section alt>
-          <H2>{c.access.title}</H2>
-          <ol className="grid gap-4 md:grid-cols-3 md:gap-5">
-            {c.access.items.map(([t, d], i) => {
-              const I = accessIcons[i] ?? Sparkles;
-              return (
-                <li key={t} className="rounded-2xl bg-card p-5 text-center shadow-soft md:p-6">
-                  <span className="mx-auto flex size-14 items-center justify-center rounded-full bg-primary"><I className="size-6 text-primary-foreground" /></span>
-                  <h3 className="mt-4 font-extrabold tracking-wide">{t}</h3>
-                  <p className="mt-2 text-muted-foreground">{d}</p>
-                </li>
-              );
-            })}
-          </ol>
-        </Section>
-
-        {/* 14 Garantia */}
-        <Section narrow>
-          <div className="text-center">
-            <svg viewBox="0 0 160 160" className="mx-auto size-28 md:size-40" role="img" aria-label={c.guarantee.seal}>
-              <circle cx="80" cy="80" r="76" fill="currentColor" className="text-primary" />
-              <circle cx="80" cy="80" r="64" fill="none" stroke="currentColor" strokeWidth="2" strokeDasharray="4 4" className="text-primary-foreground" />
-              <text x="80" y="92" textAnchor="middle" fontSize="38" fontWeight="800" fill="currentColor" className="font-display text-primary-foreground">{c.guarantee.seal}</text>
-            </svg>
-            <h2 className="mt-4 text-2xl font-extrabold md:mt-6 md:text-4xl">{c.guarantee.title}</h2>
+              ))}
+            </ol>
           </div>
-          <div className="mt-7 space-y-4 text-center text-base leading-relaxed md:mt-8 md:space-y-5 md:text-lg">
-            {c.guarantee.paragraphs.map((p) => <p key={p}>{p}</p>)}
+        </section>
+        <section className="school-section school-guarantee">
+          <div className="school-wrap">
+            <div className="school-seal">
+              <ShieldCheck size={42} />
+              <strong>{c.guarantee.seal}</strong>
+              <span>DE GARANTIA</span>
+            </div>
+            <div>
+              <h2>{c.guarantee.title}</h2>
+              {c.guarantee.paragraphs.map((text) => (
+                <p key={text}>{text}</p>
+              ))}
+              <Buy pale>{c.guarantee.cta}</Buy>
+            </div>
           </div>
-          <BuyButton label={c.guarantee.cta} />
-        </Section>
-
-        {/* 15 Duas opções */}
-        <Section>
-          <H2>{c.choice.title}</H2>
-          <div className="grid gap-4 md:grid-cols-2 md:gap-5">
-            {c.choice.options.map(([t, d], i) => (
-              <div key={t} className={`rounded-3xl p-6 md:p-8 ${i === 1 ? "border-2 border-primary bg-secondary shadow-soft" : "border border-border"}`}>
-                <h3 className={`text-lg font-extrabold ${i === 1 ? "text-primary" : ""}`}>{t}</h3>
-                <p className="mt-3 text-[17px]">{d}</p>
-              </div>
+        </section>
+        <section className="school-section school-choice">
+          <div className="school-wrap">
+            <Heading label="Qual vai ser o seu próximo passo?">{c.choice.title}</Heading>
+            <div className="school-choice-grid">
+              {c.choice.options.map(([title, description], i) => (
+                <article key={title}>
+                  {i === 0 ? <X size={26} /> : <Check size={26} />}
+                  <h3>{title}</h3>
+                  <p>{description}</p>
+                </article>
+              ))}
+            </div>
+            {c.choice.paragraphs.map((text) => (
+              <p className="school-choice-copy" key={text}>
+                {text}
+              </p>
             ))}
           </div>
-          <div className="mx-auto mt-7 max-w-[720px] space-y-4 text-center text-base md:mt-10 md:text-lg">
-            {c.choice.paragraphs.map((p) => <p key={p}>{p}</p>)}
+        </section>
+        <section className="school-section school-faq" id="duvidas">
+          <div className="school-wrap">
+            <Heading label="Antes de começar">{c.faq.title}</Heading>
+            <Accordion type="single" collapsible>
+              {c.faq.items.map(([question, answer], i) => (
+                <AccordionItem key={question} value={`q${i}`}>
+                  <AccordionTrigger>{question}</AccordionTrigger>
+                  <AccordionContent>{answer}</AccordionContent>
+                </AccordionItem>
+              ))}
+            </Accordion>
           </div>
-          <BuyButton label={c.choice.cta} />
-        </Section>
-
-        {/* 17 Preço */}
-        <PriceBlock id="preco-2" />
-
-        {/* 18 FAQ */}
-        <Section alt narrow>
-          <H2>{c.faq.title}</H2>
-          <Accordion type="single" collapsible className="rounded-2xl bg-card px-4 shadow-soft md:px-5">
-            {c.faq.items.map(([q, a], i) => (
-              <AccordionItem key={q} value={`q${i}`}>
-                <AccordionTrigger className="py-4 text-left text-base md:py-5 font-semibold">{q}</AccordionTrigger>
-                <AccordionContent className="text-base text-muted-foreground">{a}</AccordionContent>
-              </AccordionItem>
-            ))}
-          </Accordion>
-        </Section>
+        </section>
+        <section className="school-final">
+          <span className="school-eyebrow">A PRÓXIMA IDEIA É SUA</span>
+          <h2>
+            Seu personagem.<em>Sua próxima criação.</em>
+          </h2>
+          <p>{c.PRODUCT} · Kit completo e 4 bônus</p>
+          <Buy>{c.choice.cta}</Buy>
+          <span className="school-final-price">
+            {c.stickyBar.price} · {c.guarantee.title}
+          </span>
+        </section>
       </main>
-
-      <footer className="bg-night px-4 py-8 text-sm md:px-5 md:py-12 text-night-foreground/80">
-        <div className="mx-auto max-w-[720px] space-y-3 text-center">
-          {c.footer.lines.map((l) => <p key={l}>{l}</p>)}
-          <div className="mx-auto my-4 h-px w-16 bg-primary/60" aria-hidden="true" />
-          <p className="font-medium text-night-foreground">{c.footer.copyright}</p>
-        </div>
+      <footer className="school-footer">
+        <a href="#inicio" className="school-brand">
+          <img src="/favicon.svg" width="30" height="30" alt="" />
+          INFLUENCIADOR DE IA
+        </a>
+        {c.footer.lines.map((text) => (
+          <p key={text}>{text}</p>
+        ))}
+        <p>{c.footer.copyright}</p>
       </footer>
-
-      {/* Barra fixa mobile */}
-      <div className="mobile-purchase-bar fixed inset-x-0 bottom-0 z-50 border-t border-border bg-background/95 px-4 pt-3 backdrop-blur md:hidden">
-        <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3">
-          <span className="min-w-0 whitespace-nowrap font-display text-base font-extrabold text-night">{c.stickyBar.price}</span>
-          <Button asChild variant="cta" className="h-12 min-w-[156px] px-4">
-            <a href={c.CHECKOUT_URL} target="_blank" rel="noopener noreferrer">{c.stickyBar.cta}</a>
-          </Button>
+      <aside className="school-floating-offer" aria-label="Comprar o kit">
+        <div>
+          <strong>{c.stickyBar.price}</strong>
+          <span>Kit completo + 4 bônus</span>
         </div>
-      </div>
+        <Buy />
+      </aside>
     </div>
   );
 }
