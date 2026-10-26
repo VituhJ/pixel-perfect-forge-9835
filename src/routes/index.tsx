@@ -34,7 +34,7 @@ import {
 import * as c from "@/content";
 import kitCover from "@/assets/kit-influenciador-ia.png";
 import bonusCover from "@/assets/mockup-bonus-influenciador-ia.png";
-import influencerPortrait from "@/assets/influenciadora-hero.png";
+import heroArtwork from "@/assets/influenciador-topo.png";
 import "@/school-layout.css";
 
 export const Route = createFileRoute("/")({
@@ -363,21 +363,13 @@ function Index() {
               Conheça o kit <ArrowDown size={15} />
             </a>
           </nav>
-          <div className="school-hero-art" aria-hidden="true">
-            <span className="school-orbit school-orbit--one">
-              <img src={`${MEDIA}/CS004.webp`} alt="" />
-            </span>
-            <span className="school-orbit school-orbit--two">
-              <img src={`${MEDIA}/CS024.webp`} alt="" />
-            </span>
-            <div className="school-art-halo" />
-            <img className="school-hero-kit" src={kitCover} alt="" fetchPriority="high" />
-            <img className="school-hero-person" src={influencerPortrait} alt="" />
-            <span className="school-sticker">
-              COPIA
-              <br />E COLA <Sparkles size={18} />
-            </span>
-            <span className="school-art-star">✦</span>
+          <div className="school-hero-art">
+            <img
+              className="school-hero-artwork"
+              src={heroArtwork}
+              alt="Influenciador de IA — três personagens digitais"
+              fetchPriority="high"
+            />
           </div>
           <div className="school-hero-copy">
             <span className="school-pill">

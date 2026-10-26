@@ -204,8 +204,15 @@
 .school-hero-art {
   position: relative;
   width: min(560px, 100%);
-  height: 295px;
+  height: 340px;
   margin: 10px auto 26px;
+}
+.school-hero-artwork {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 12px 18px #29254822);
 }
 .school-art-halo {
   position: absolute;
@@ -1341,7 +1348,7 @@
     font-size: 10px;
   }
   .school-hero-art {
-    height: 220px;
+    height: 270px;
     max-width: 335px;
     margin: 10px auto 20px;
   }
