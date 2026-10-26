@@ -1346,6 +1346,17 @@
   }
   .school-nav > a:last-child {
     font-size: 10px;
+    min-height: 44px;
+  }
+  .school-row-controls button,
+  .school-video-controls button {
+    width: 44px;
+    height: 44px;
+  }
+  .school-reel figcaption a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
   }
   .school-hero-art {
     height: 270px;
