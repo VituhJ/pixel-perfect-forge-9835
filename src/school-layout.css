@@ -1730,10 +1730,141 @@
     width: 14px;
   }
 }
+.school-reading-progress {
+  position: fixed;
+  z-index: 120;
+  inset: 0 0 auto;
+  height: 4px;
+  background: linear-gradient(90deg, #6543d7, #ba91ff, #f3d785);
+  transform: scaleX(0);
+  transform-origin: left;
+  pointer-events: none;
+}
+.school-back-top {
+  position: fixed;
+  z-index: 45;
+  right: 20px;
+  bottom: calc(var(--purchase-bar-height, 90px) + 24px + env(safe-area-inset-bottom, 0px));
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border: 2px solid var(--ink);
+  border-radius: 50%;
+  background: var(--paper);
+  color: var(--ink);
+  box-shadow: 3px 4px 0 #d1bfec;
+}
+.school-back-top[hidden] {
+  display: none;
+}
+.school-support-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 24px;
+  margin-top: 28px;
+  border: 1px solid #cbb8eb;
+  border-radius: 18px;
+  background: #fffaf0;
+}
+.school-support-card > svg {
+  flex-shrink: 0;
+  color: var(--purple);
+}
+.school-support-card > div {
+  min-width: 0;
+}
+.school-support-card p {
+  margin: 5px 0 10px;
+  font-size: 14px;
+}
+.school-support-link {
+  color: #5030b2;
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  overflow-wrap: anywhere;
+}
+.school-hero-art {
+  transform: perspective(900px) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg));
+  transition: transform 220ms ease-out;
+}
+@keyframes school-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .school-hero-artwork {
+    animation: school-float 6s ease-in-out infinite;
+  }
+}
+@media (hover: hover) and (pointer: fine) {
+  .school-bonus,
+  .school-who-grid article,
+  .school-back-top {
+    transition:
+      transform 220ms ease,
+      box-shadow 220ms ease;
+  }
+  .school-bonus:hover,
+  .school-who-grid article:hover {
+    transform: translateY(-7px);
+    box-shadow: 8px 12px 0 #d1bfec;
+  }
+  .school-character img,
+  .school-main-cover img,
+  .school-bonus img {
+    transition: transform 400ms cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+  .school-character:hover img {
+    transform: scale(1.045);
+  }
+  .school-main-kit:hover .school-main-cover img,
+  .school-bonus:hover img {
+    transform: translateY(-5px) rotate(-2deg);
+  }
+  .school-buy svg {
+    transition: transform 220ms ease;
+  }
+  .school-buy:hover svg {
+    transform: translateX(4px);
+  }
+  .school-back-top:hover {
+    transform: translateY(-4px);
+  }
+}
+.school-faq button[data-state="open"] {
+  color: var(--purple);
+}
+@media (max-width: 767px) {
+  .school-support-card {
+    padding: 18px;
+    gap: 12px;
+    font-size: 13px;
+  }
+  .school-back-top {
+    right: 14px;
+  }
+}
 @media (prefers-reduced-motion: reduce) {
   .school-page * {
     scroll-behavior: auto !important;
     animation: none !important;
     transition: none !important;
+  }
+  .school-hero-art,
+  .school-bonus:hover,
+  .school-who-grid article:hover,
+  .school-back-top:hover,
+  .school-character:hover img,
+  .school-main-kit:hover .school-main-cover img,
+  .school-bonus:hover img {
+    transform: none;
   }
 }

@@ -22,9 +22,11 @@ import {
   Lightbulb,
   Clock,
   Rocket,
+  Mail,
 } from "lucide-react";
 import { MetaTracking } from "@/lib/meta-tracking";
 import { OfferCountdown } from "@/components/OfferCountdown";
+import { SalesPageEffects } from "@/components/SalesPageEffects";
 import {
   Accordion,
   AccordionContent,
@@ -349,6 +351,7 @@ function Index() {
   return (
     <div className="sales-page school-page">
       <MetaTracking />
+      <SalesPageEffects />
       <div className="school-announcement">
         <OfferCountdown />
       </div>
@@ -680,10 +683,31 @@ function Index() {
               {c.faq.items.map(([question, answer], i) => (
                 <AccordionItem key={question} value={`q${i}`}>
                   <AccordionTrigger>{question}</AccordionTrigger>
-                  <AccordionContent>{answer}</AccordionContent>
+                  <AccordionContent>
+                    {answer?.split(c.SUPPORT_EMAIL).map((part, index) => (
+                      <span key={index}>
+                        {index > 0 && (
+                          <a className="school-support-link" href={`mailto:${c.SUPPORT_EMAIL}`}>
+                            {c.SUPPORT_EMAIL}
+                          </a>
+                        )}
+                        {part}
+                      </span>
+                    ))}
+                  </AccordionContent>
                 </AccordionItem>
               ))}
             </Accordion>
+            <div className="school-support-card">
+              <Mail size={26} aria-hidden="true" />
+              <div>
+                <strong>Ainda ficou com alguma dúvida?</strong>
+                <p>Fale comigo pelo e-mail de suporte.</p>
+                <a className="school-support-link" href={`mailto:${c.SUPPORT_EMAIL}`}>
+                  {c.SUPPORT_EMAIL}
+                </a>
+              </div>
+            </div>
           </div>
         </section>
         <section className="school-final">

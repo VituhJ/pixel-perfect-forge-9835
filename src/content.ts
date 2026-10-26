@@ -206,6 +206,8 @@ export const choice = {
   cta: "Escolho a opção 2: quero meu influenciador de IA pronto",
 };
 
+export const SUPPORT_EMAIL = "vitordejesus9899@gmail.com";
+
 export const faq = {
   title: "Perguntas frequentes",
   items: [
@@ -213,9 +215,9 @@ export const faq = {
     ["Preciso pagar alguma ferramenta?", "As ferramentas de IA são de terceiros e não estão incluídas. Muitas têm plano gratuito com limites (créditos, marca d'água, uso comercial). Confira o plano atual no site oficial de cada uma. O kit mostra em que ordem usar cada ferramenta."],
     ["Posso usar o rosto ou a voz de uma pessoa famosa?", "Não. O kit ensina a criar um personagem 100% fictício e traz as regras de uso responsável. Nunca use rosto, voz ou nome de pessoa real sem autorização."],
     ["Isso garante seguidores ou dinheiro?", "Não. O kit entrega o caminho para você publicar o seu primeiro vídeo. Os resultados dependem do seu nicho, da sua constância e de outros fatores."],
-    ["Como posso tirar dúvidas?", "[COLOQUE AQUI O SEU E-MAIL OU WHATSAPP DE SUPORTE]"],
-    ["Por quanto tempo terei acesso?", "[CONFIRME NA PLATAFORMA DE VENDAS]"],
-    ["Terei acesso a você?", "[RESPONDA DE ACORDO COM O QUE VOCÊ REALMENTE OFERECE]"],
+    ["Como posso tirar dúvidas?", `Envie suas dúvidas para o nosso e-mail de suporte: ${SUPPORT_EMAIL}.`],
+    ["Por quanto tempo terei acesso?", "Seu acesso ao kit digital e aos quatro bônus é vitalício."],
+    ["Terei acesso a você?", `Sim! Você poderá falar comigo pelo e-mail de suporte: ${SUPPORT_EMAIL}.`],
   ],
 };
 
