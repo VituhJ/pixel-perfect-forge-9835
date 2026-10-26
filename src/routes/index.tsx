@@ -422,13 +422,6 @@ function Index() {
           </div>
           <CharacterRow items={characters.slice(0, 15)} row={1} />
           <CharacterRow items={characters.slice(15)} row={2} />
-          <p className="school-source">
-            Galeria visual da{" "}
-            <a href="https://charactersschool.com/" target="_blank" rel="noopener noreferrer">
-              Characters School
-            </a>
-            . Personagens de referência; não são personagens incluídos no kit.
-          </p>
           <div className="school-center">
             <Buy pale />
           </div>
