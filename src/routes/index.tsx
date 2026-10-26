@@ -439,10 +439,6 @@ function Index() {
                 <Reel key={reel.file} reel={reel} />
               ))}
             </div>
-            <p className="school-source">
-              Vídeos de terceiros, com os autores creditados. São referências criativas, não
-              demonstrações do kit nem resultados de compradores.
-            </p>
             <div className="school-facts">
               {[
                 ["20", "prompts prontos"],
